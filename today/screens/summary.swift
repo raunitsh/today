@@ -11,14 +11,17 @@ struct SummaryScreen: View
 {
     var body: some View
     {
-        VStack (alignment: .leading)
+        ScrollView
         {
-            DateAndStreak ();
-            CurrentStats ();
-            EatenToday ();
-            ActivityToday ();
+            VStack (alignment: .leading)
+            {
+                DateAndStreak ();
+                CurrentStats ();
+                EatenToday ();
+                ActivityToday ();
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .padding(.all)
         }
-        .padding(.all)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }

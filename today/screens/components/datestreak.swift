@@ -16,8 +16,8 @@ struct Streak: View
             Label("12 day streak", systemImage: "tag.fill")
                 .font(.footnote)
         }
-        .buttonStyle(.bordered)               // Gives it a pill background
-        .buttonBorderShape(.capsule)          // Makes it a rounded capsule
+        .buttonStyle(.bordered)
+        .buttonBorderShape(.capsule)          
         .tint(.blue)
     }
 }
@@ -35,13 +35,11 @@ struct DateAndStreak: View
                 Text ("Daily Deficit")
                     .font(.footnote)
             }
-            .debug()
             
             Spacer ()
             
             Streak ()
         }
         .frame(maxWidth: .infinity)
-        .debug()
     }
 }

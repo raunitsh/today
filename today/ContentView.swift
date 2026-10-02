@@ -11,10 +11,20 @@ struct ContentView: View
 {
     var body: some View
     {
-        ScrollView
+        TabView
         {
-            SummaryScreen ()
-                .border(.red)
+            NavigationStack
+            { InventoryScreen () }.tabItem
+            { Label ("Inventory", systemImage: "house") }
+
+            
+            NavigationStack
+            { SummaryScreen () }
+                .tabItem { Label ("Today", systemImage: "house") }
+            
+            NavigationStack
+            { SummaryScreen () }.tabItem
+            { Label ("Progress", systemImage: "house") }
         }
     }
 }
