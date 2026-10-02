@@ -39,11 +39,18 @@ struct ListItem: View
     }
 }
 
-struct ListItemContent
+struct ListItemContent: Identifiable, Sendable
 {
-    let id = UUID ();
-    let title: String;
-    let cals: Int32;
+    let id: UUID
+    let title: String
+    let cals: Int32
+
+    nonisolated init(id: UUID = UUID(), title: String, cals: Int32)
+    {
+        self.id = id
+        self.title = title
+        self.cals = cals
+    }
 }
 
 enum ViewType: String, CaseIterable, Identifiable

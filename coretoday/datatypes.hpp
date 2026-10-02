@@ -9,7 +9,7 @@
 
 struct tListItemContent
 {
-    int         uFootNote;
+    int         uCals;
     std::string uId;
     std::string uTitle;
 };

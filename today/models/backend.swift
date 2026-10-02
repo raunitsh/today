@@ -7,7 +7,7 @@
 import coretoday
 import Foundation
 
-class Backend
+actor Backend
 {
     static let shared = Backend ();
     
@@ -34,9 +34,42 @@ class Backend
         return vDb.AddMealInv(id, title, cals);
     }
     
+    public func AddActInv (_ pMeal: ListItemContent) -> Bool
+    {
+        let title = std.string (pMeal.title);
+        let cals = pMeal.cals;
+        let id = std.string (pMeal.id.uuidString);
+        
+        return vDb.AddExInv (id, title, cals);
+    }
+    
     public func GetMealsInv () -> [ListItemContent]
     {
-        return [];
+        let res = vDb.GetMealsInv ();
+        var meals: [ListItemContent] = [];
+        
+        for meal in res
+        {
+            let title = String (meal.uTitle);
+            let id = UUID(uuidString: String (meal.uId)) ?? UUID ();
+            let cals = meal.uCals;
+            
+            meals.append (ListItemContent (id: id, title: title, cals: cals))
+        }
+        
+        return meals;
+    }
+    
+    public func GetActInv () -> [ListItemContent]
+    {
+        return vDb.GetExInv().map
+        { meal in
+            ListItemContent(
+                id: UUID(uuidString: String(meal.uId)) ?? UUID(),
+                title: String(meal.uTitle),
+                cals: meal.uCals
+            )
+        }
     }
     
     private var vDb: DB = DB ();

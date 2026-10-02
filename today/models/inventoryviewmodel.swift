@@ -17,8 +17,11 @@ class InventoryViewModel
     {
         loading = true;
         
-        meals = gMeals;
-        activities = gActivities;
+        Task
+        {
+            meals = await Backend.shared.GetMealsInv ();
+            activities = await Backend.shared.GetActInv ();
+        }
         
         loading = false;
     }
@@ -29,14 +32,23 @@ class InventoryViewModel
         
         if viewType == .meals
         {
-            if Backend.shared.AddMealInv (item)
+            Task
             {
-                meals.append (item);
+                if await Backend.shared.AddMealInv (item)
+                {
+                    meals.append (item);
+                }
             }
             return;
         }
-        
-        activities.append (item);
+
+        Task
+        {
+            if await Backend.shared.AddActInv (item)
+            {
+                activities.append (item);
+            }
+        }
     }
     
     var viewType:   ViewType            = .meals;
