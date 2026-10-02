@@ -16,7 +16,7 @@ struct ExercisesInv: View
     {
         ListWithTitle (contents: activities, title: "\(activities.count) activities")
         {id in
-            activities.removeAll {$0.id == id}
+            InventoryViewModel.shared.delItem (id)
         }
     }
 }

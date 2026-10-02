@@ -20,12 +20,14 @@ public:
     
     bool                            Open            (const std::string& pPath);
     void                            Close           ();
-    
-    bool                            AddMealInv      (const std::string& pId, const std::string& pTitle, const int& pCals);
+
     std::vector<tListItemContent>   GetMealsInv     ();
+    bool                            AddMealInv      (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            DelMealInv      (const std::string& pId);
     
-    bool                            AddExInv        (const std::string& pId, const std::string& pTitle, const int& pCals);
     std::vector<tListItemContent>   GetExInv        ();
+    bool                            AddExInv        (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            DelExInv        (const std::string& pId);
     
 private:
     

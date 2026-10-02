@@ -204,3 +204,51 @@ DB::GetExInv ()
     
     return res;
 }
+
+bool
+DB::DelMealInv (const std::string &pId)
+{
+        const char *    q = "DELETE FROM meals WHERE id = ?;";
+        sqlite3_stmt *  st = nullptr;
+        bool            rc;
+    
+    if (!vDb)
+    {
+        return false;
+    }
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
+    {
+        return false;
+    }
+    
+    sqlite3_bind_text(st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
+    rc = (sqlite3_step(st) == SQLITE_DONE);
+    sqlite3_finalize(st);
+    
+    return rc;
+}
+
+bool
+DB::DelExInv (const std::string &pId)
+{
+        const char *    q = "DELETE FROM activities WHERE id = ?;";
+        sqlite3_stmt *  st = nullptr;
+        bool            rc;
+    
+    if (!vDb)
+    {
+        return false;
+    }
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
+    {
+        return false;
+    }
+    
+    sqlite3_bind_text(st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
+    rc = (sqlite3_step(st) == SQLITE_DONE);
+    sqlite3_finalize(st);
+    
+    return rc;
+}

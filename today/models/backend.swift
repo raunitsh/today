@@ -63,13 +63,23 @@ actor Backend
     public func GetActInv () -> [ListItemContent]
     {
         return vDb.GetExInv().map
-        { meal in
+        { act in
             ListItemContent(
-                id: UUID(uuidString: String(meal.uId)) ?? UUID(),
-                title: String(meal.uTitle),
-                cals: meal.uCals
+                id: UUID(uuidString: String(act.uId)) ?? UUID(),
+                title: String(act.uTitle),
+                cals: act.uCals
             )
         }
+    }
+    
+    public func DelMealInv (_ pId: UUID) -> Bool
+    {
+        return vDb.DelMealInv (std.string (pId.uuidString));
+    }
+    
+    public func DelActInv (_ pId: UUID) -> Bool
+    {
+        return vDb.DelExInv (std.string (pId.uuidString));
     }
     
     private var vDb: DB = DB ();

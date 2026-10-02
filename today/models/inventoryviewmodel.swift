@@ -51,6 +51,29 @@ class InventoryViewModel
         }
     }
     
+    func delItem (_ pId: UUID) -> Void
+    {
+        if viewType == .meals
+        {
+            Task
+            {
+                if await Backend.shared.DelMealInv (pId)
+                {
+                    meals.removeAll { $0.id == pId }
+                }
+            }
+            return;
+        }
+
+        Task
+        {
+            if await Backend.shared.DelActInv (pId)
+            {
+                activities.removeAll { $0.id == pId }
+            }
+        }
+    }
+    
     var viewType:   ViewType            = .meals;
     var meals:      [ListItemContent]   = [];
     var activities: [ListItemContent]   = [];
