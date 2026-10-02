@@ -1,0 +1,6 @@
+framework module coretoday {
+    umbrella header "coretoday.h"
+    export *
+    module * { export * }
+    requires cplusplus
+}

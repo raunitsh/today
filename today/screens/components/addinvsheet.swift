@@ -16,10 +16,10 @@ struct AddInvSheet: View
     private var title: String = "";
     
     @State
-    private var cals: Int = 500;
+    private var cals: Int32 = 500;
     
     let pViewType: ViewType;
-    let pSubmit: (_ pTitle: String, _ pCals: Int) -> Void;
+    let pSubmit: (_ pTitle: String, _ pCals: Int32) -> Void;
     
     var body: some View
     {

@@ -24,7 +24,7 @@ struct ListWithTitle: View
             
             ForEach (contents, id: \.id)
             {item in
-                ListItem (pTitle: item.title, pFootnote: item.footnote)
+                ListItem (pTitle: item.title, pCals: item.cals)
                 {
                     pAction (item.id)
                 }

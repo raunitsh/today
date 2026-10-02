@@ -27,7 +27,20 @@ struct ContentView: View
         }
         .task
         {
+            InitBackend ();
             InventoryViewModel.shared.LoadData()
+        }
+    }
+    
+    private func InitBackend () -> Void
+    {
+        let filemanager = FileManager.default;
+        if let docsUrl = filemanager.urls(for: .documentDirectory, in: .userDomainMask).first
+        {
+            if !Backend.shared.Init (docsUrl)
+            {
+                print ("Backend init failed");
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 struct ListItem: View
 {
     let pTitle: String;
-    let pFootnote: String;
+    let pCals: Int32;
     
     let pAction: () -> Void;
     
@@ -23,7 +23,7 @@ struct ListItem: View
             VStack (alignment: .leading)
             {
                 Text (pTitle).font(.body)
-                Text (pFootnote).font(.footnote)
+                Text ("\(pCals) kcal").font(.footnote)
             }
             .debug()
             
@@ -43,7 +43,7 @@ struct ListItemContent
 {
     let id = UUID ();
     let title: String;
-    let footnote: String;
+    let cals: Int32;
 }
 
 enum ViewType: String, CaseIterable, Identifiable

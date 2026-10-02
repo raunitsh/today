@@ -23,13 +23,16 @@ class InventoryViewModel
         loading = false;
     }
     
-    func addItem (_ pTitle: String, _ pCals: Int) -> Void
+    func addItem (_ pTitle: String, _ pCals: Int32) -> Void
     {
-        let item = ListItemContent(title: pTitle, footnote: "\(pCals) kcal");
+        let item = ListItemContent(title: pTitle, cals: pCals);
         
         if viewType == .meals
         {
-            meals.append (item);
+            if Backend.shared.AddMealInv (item)
+            {
+                meals.append (item);
+            }
             return;
         }
         
