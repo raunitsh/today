@@ -14,12 +14,16 @@ struct InvHeader: View
         HStack
         {
             Text ("Inventory").font(.title)
+            Spacer()
             Button ("add", systemImage: "plus")
             {
                 
             }
             .labelStyle(.iconOnly)
+            
         }
+        .frame(maxWidth: .infinity)
+        .debug()
     }
 }
 
