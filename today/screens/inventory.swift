@@ -44,21 +44,8 @@ struct InvHeader: View
 
 struct InventoryScreen: View
 {
-    @State
-    private var viewType: ViewType = .meals
-    
-    @State
-    private var meals: [ListItemContent] = [
-        ListItemContent(title: "Oats and banana", footnote: "320 kcal"),
-        ListItemContent(title: "Boiled eggs x3", footnote: "210 kcal"),
-        ListItemContent(title: "Chicken rice bowl", footnote: "620 kcal")
-    ];
-    
-    @State
-    var activities: [ListItemContent] = [
-        ListItemContent (title: "Walk, 10 km", footnote: "+460 kcal"),
-        ListItemContent (title: "Badminton", footnote: "+120 kcal"),
-    ];
+    @Bindable
+    var vm = InventoryViewModel.shared;
     
     var body: some View
     {
@@ -66,25 +53,12 @@ struct InventoryScreen: View
         {
             VStack (alignment: .leading)
             {
-                InvHeader (pViewType: viewType, pAddNewItem: addItem(_:_:))
-                InvSwitchView (pViewType: $viewType, meals: $meals, activities: $activities)
+                InvHeader (pViewType: vm.viewType, pAddNewItem: vm.addItem(_:_:))
+                InvSwitchView (pViewType: $vm.viewType, meals: $vm.meals, activities: $vm.activities)
             }
             
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.all)
         }
-    }
-    
-    private func addItem (_ pTitle: String, _ pCals: Int) -> Void
-    {
-        let item = ListItemContent(title: pTitle, footnote: "\(pCals) kcal");
-        
-        if viewType == .meals
-        {
-            meals.append (item);
-            return;
-        }
-        
-        activities.append (item);
     }
 }

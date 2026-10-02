@@ -16,19 +16,20 @@ struct VisualProgress: View
         ProgressView (value: progress)
             .progressViewStyle(.linear)
             .tint(.green)
-//            .clipShape(.capsule)
     }
 }
 
 struct CurrentStats: View
 {
+    var v = TodayViewModel.shared;
+    
     var body: some View
     {
         VStack (alignment: .leading)
         {
             HStack (alignment: .bottom)
             {
-                Text ("-1,040")
+                Text ("\(v.deficit)")
                     .font(.title)
                     .bold()
                 Text ("kcal")
@@ -41,9 +42,9 @@ struct CurrentStats: View
             HStack
             {
                 Text ("Burn")
-                Text ("2,190")
+                Text ("\(v.burn)")
                 Text ("Eaten")
-                Text ("1,150")
+                Text ("\(v.eaten)")
             }
             .font(.footnote)
             .debug()

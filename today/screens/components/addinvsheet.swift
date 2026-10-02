@@ -34,6 +34,7 @@ struct AddInvSheet: View
                 {
                     TextField ("Calories", value: $cals, format: .number)
                         .textFieldStyle(.roundedBorder)
+                        .keyboardType(.numberPad)
                     Text ("kcal")
                 }
             }

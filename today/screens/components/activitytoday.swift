@@ -9,17 +9,14 @@ import SwiftUI
 
 struct ActivityToday: View
 {
-    @State
-    var activities: [ListItemContent] = [
-        ListItemContent (title: "Walk, 10 km", footnote: "+460 kcal"),
-        ListItemContent (title: "Badminton", footnote: "+120 kcal"),
-    ];
+    @Bindable
+    var v = TodayViewModel.shared;
  
     var body: some View
     {
-        ListWithTitle (contents: activities, title: "Activity")
+        ListWithTitle (contents: v.actToday, title: "Activity")
         {id in
-            activities.removeAll { $0.id == id }
+            v.actToday.removeAll { $0.id == id }
         }
     }
 }

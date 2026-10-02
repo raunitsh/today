@@ -9,11 +9,13 @@ import SwiftUI
 
 struct Streak: View
 {
+    var v = TodayViewModel.shared;
+    
     var body: some View
     {
         Button {
         } label: {
-            Label("12 day streak", systemImage: "tag.fill")
+            Label("\(v.streak) day streak", systemImage: "tag.fill")
                 .font(.footnote)
         }
         .buttonStyle(.bordered)
@@ -24,13 +26,15 @@ struct Streak: View
 
 struct DateAndStreak: View
 {
+    var v = TodayViewModel.shared;
+    
     var body: some View
     {
         HStack
         {
             VStack (alignment: .leading)
             {
-                Text ("Fri 2 Oct")
+                Text (v.date)
                     .font(.title3)
                 Text ("Daily Deficit")
                     .font(.footnote)

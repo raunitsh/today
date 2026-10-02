@@ -14,8 +14,8 @@ struct ContentView: View
         TabView
         {
             NavigationStack
-            { SummaryScreen () }
-                .tabItem { Label ("Today", systemImage: "house") }
+            { SummaryScreen () }.tabItem
+            { Label ("Today", systemImage: "house") }
             
             NavigationStack
             { InventoryScreen () }.tabItem
@@ -24,6 +24,10 @@ struct ContentView: View
             NavigationStack
             { SummaryScreen () }.tabItem
             { Label ("Progress", systemImage: "house") }
+        }
+        .task
+        {
+            InventoryViewModel.shared.LoadData()
         }
     }
 }
