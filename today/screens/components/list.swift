@@ -9,9 +9,9 @@ import SwiftUI
 
 struct ListWithTitle: View
 {
-    @State
-    var contents: [ListItemContent];
+    let contents: [ListItemContent];
     let title: String;
+    let pAction: (_ pItem: UUID) -> Void;
     
     var body: some View
     {
@@ -26,7 +26,7 @@ struct ListWithTitle: View
             {item in
                 ListItem (pTitle: item.title, pFootnote: item.footnote)
                 {
-                    deleteItem (item.id)
+                    pAction (item.id)
                 }
                 
                 if item.id != contents.last?.id
@@ -36,10 +36,5 @@ struct ListWithTitle: View
             }
         }
         .padding(.top)
-    }
-    
-    private func deleteItem (_ id: UUID) -> Void
-    {
-        contents.removeAll { $0.id == id }
-    }
+    }    
 }

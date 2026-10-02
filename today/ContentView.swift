@@ -14,13 +14,12 @@ struct ContentView: View
         TabView
         {
             NavigationStack
-            { InventoryScreen () }.tabItem
-            { Label ("Inventory", systemImage: "house") }
-
-            
-            NavigationStack
             { SummaryScreen () }
                 .tabItem { Label ("Today", systemImage: "house") }
+            
+            NavigationStack
+            { InventoryScreen () }.tabItem
+            { Label ("Inventory", systemImage: "house") }
             
             NavigationStack
             { SummaryScreen () }.tabItem

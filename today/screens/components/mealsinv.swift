@@ -9,14 +9,14 @@ import SwiftUI
 
 struct MealsInv: View
 {
-    private var meals: [ListItemContent] = [
-        ListItemContent(title: "Oats and banana", footnote: "320 kcal"),
-        ListItemContent(title: "Boiled eggs x3", footnote: "210 kcal"),
-        ListItemContent(title: "Chicken rice bowl", footnote: "620 kcal")
-    ];
+    @Binding
+    var meals: [ListItemContent];
     
     var body: some View
     {
         ListWithTitle (contents: meals, title: "\(meals.count) meals")
+        {id in
+            meals.removeAll { $0.id == id }
+        }
     }
 }

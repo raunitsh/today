@@ -9,13 +9,14 @@ import SwiftUI
 
 struct ExercisesInv: View
 {
-    let activities: [ListItemContent] = [
-        ListItemContent (title: "Walk, 10 km", footnote: "+460 kcal"),
-        ListItemContent (title: "Badminton", footnote: "+120 kcal"),
-    ];
+    @Binding
+    var activities: [ListItemContent];
     
     var body: some View
     {
         ListWithTitle (contents: activities, title: "\(activities.count) activities")
+        {id in
+            activities.removeAll {$0.id == id}
+        }
     }
 }

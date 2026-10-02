@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ActivityToday: View
 {
-    let activities: [ListItemContent] = [
+    @State
+    var activities: [ListItemContent] = [
         ListItemContent (title: "Walk, 10 km", footnote: "+460 kcal"),
         ListItemContent (title: "Badminton", footnote: "+120 kcal"),
     ];
@@ -17,5 +18,8 @@ struct ActivityToday: View
     var body: some View
     {
         ListWithTitle (contents: activities, title: "Activity")
+        {id in
+            activities.removeAll { $0.id == id }
+        }
     }
 }

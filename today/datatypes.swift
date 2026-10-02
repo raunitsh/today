@@ -45,3 +45,11 @@ struct ListItemContent
     let title: String;
     let footnote: String;
 }
+
+enum ViewType: String, CaseIterable, Identifiable
+{
+    case meals = "Meals";
+    case exercises = "Exercises";
+    
+    var id: String {rawValue}
+}
