@@ -13,14 +13,21 @@ class TodayViewModel
     static let shared = TodayViewModel ();
     
     @MainActor
-    func LoadData () -> Void
+    func Init () -> Void
     {
         
     }
     
+    // push meal today
+    // log in backend
     func EatMeal (_ pMeal: ListItemContent) -> Void
     {
-        eatenToday.append (pMeal);
+        Task
+        {
+            await Backend.shared.LogMeal (pMeal.id);
+        }
+        
+//        eatenToday.append (pMeal);
     }
     
     func Workout (_ pAct: ListItemContent) -> Void

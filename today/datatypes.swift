@@ -9,27 +9,36 @@ import SwiftUI
 
 struct ListItem: View
 {
-    let pTitle: String;
-    let pCals: Int32;
+    let pItem: ListItemContent;
     
-    let pAction: () -> Void;
+    let pOnDelete: (_ pItem: ListItemContent) -> Void;
+    let pOnTap:  (_ pItem: ListItemContent) -> Void;
     
     var body: some View
     {
         HStack
         {
-            Image (systemName: "frying.pan")
-            
-            VStack (alignment: .leading)
+            HStack
             {
-                Text (pTitle).font(.body)
-                Text ("\(pCals) kcal").font(.footnote)
+                Image (systemName: "frying.pan")
+                
+                VStack (alignment: .leading)
+                {
+                    Text (pItem.title).font(.body)
+                    Text ("\(pItem.cals) kcal").font(.footnote)
+                }
+                .debug()
+                
+                Spacer()
             }
-            .debug()
-            
-            Spacer()
-            
-            Button ("delete", systemImage: "xmark", action: pAction)
+            .onTapGesture
+            {
+                pOnTap (pItem);
+            }
+            Button ("delete", systemImage: "xmark")
+            {
+                pOnDelete (pItem);
+            }
                 .labelStyle(.iconOnly)
                 .tint(.gray)
         }
@@ -59,4 +68,22 @@ enum ViewType: String, CaseIterable, Identifiable
     case exercises = "Exercises";
     
     var id: String {rawValue}
+}
+
+struct UserProfile: Sendable
+{
+    let name:   String;
+    let age:    Int32;
+    let weight: Int32;
+    let height: Int32;
+    let bmr:    Int32;
+    
+    nonisolated init (name: String, age: Int32, weight: Int32, height: Int32, bmr: Int32)
+    {
+        self.name = name
+        self.age = age
+        self.weight = weight
+        self.height = height
+        self.bmr = bmr
+    }
 }

@@ -22,6 +22,7 @@ struct VisualProgress: View
 struct CurrentStats: View
 {
     var v = TodayViewModel.shared;
+    var bmr = UserViewModel.shared.userProfile?.bmr ?? 0;
     
     var body: some View
     {
@@ -30,7 +31,7 @@ struct CurrentStats: View
             HStack (alignment: .bottom)
             {
                 Text ("\(v.deficit)")
-                    .font(.title)
+                    .font(.largeTitle)
                     .bold()
                 Text ("kcal")
                     .font(.footnote)
@@ -41,8 +42,8 @@ struct CurrentStats: View
             
             HStack
             {
-                Text ("Burn")
-                Text ("\(v.burn)")
+                Text ("BMR")
+                Text ("\(bmr)")
                 Text ("Eaten")
                 Text ("\(v.eaten)")
             }

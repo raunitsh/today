@@ -25,17 +25,51 @@ DB::Open (const std::string &pPath)
         int rc;
         const char * schema = R"(
             CREATE TABLE IF NOT EXISTS meals (
-                id TEXT PRIMARY KEY NOT NULL,
-                title TEXT NOT NULL,
-                cals  INTEGER NOT NULL
+                id      TEXT    PRIMARY KEY NOT NULL,
+                title   TEXT                NOT NULL,
+                cals    INTEGER             NOT NULL,
+                del     INTEGER             NOT NULL DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS activities (
-                id TEXT PRIMARY KEY NOT NULL,
-                title TEXT NOT NULL,
-                cals  INTEGER NOT NULL
+                id      TEXT    PRIMARY KEY NOT NULL,
+                title   TEXT                NOT NULL,
+                cals    INTEGER             NOT NULL,
+                del     INTEGER             NOT NULL DEFAULT 0
             );
+            CREATE TABLE IF NOT EXISTS profile (
+                id      INTEGER PRIMARY KEY CHECK (id = 1),
+                name    TEXT                NOT NULL,
+                age     INTEGER             NOT NULL,
+                weight  INTEGER             NOT NULL,
+                height  INTEGER             NOT NULL,
+                bmr     INTEGER             NOT NULL,
+                updated_at  INTEGER         NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS  today (
+                date        TEXT    PRIMARY KEY,
+                consumed    INTEGER NOT NULL    DEFAULT 0,
+                deficit     INTEGER NOT NULL    DEFAULT 0,
+                created_at  INTEGER NOT NULL,
+                updated_at  INTEGER NOT NULL
+            );
+            CREATE TABLE IF NOT EXISTS today_meals (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                entry_date  TEXT    NOT NULL,
+                meal_id     TEXT    NOT NULL,
+                
+                FOREIGN KEY (entry_date) REFERENCES today(date) ON DELETE CASCADE,
+                FOREIGN KEY (meal_id)   REFERENCES  meals(id)   ON DELETE RESTRICT
+            );
+            CREATE TABLE IF NOT EXISTS today_act (
+                id          INTEGER PRIMARY KEY AUTOINCREMENT,
+                entry_date  TEXT    NOT NULL,
+                act_id      TEXT    NOT NULL,
+                
+                FOREIGN KEY (entry_date) REFERENCES today(date)     ON DELETE CASCADE,
+                FOREIGN KEY (act_id)   REFERENCES  activities(id)   ON DELETE RESTRICT
+            );            
         )";
-    
+        
     rc = sqlite3_open(pPath.c_str (), &vDb);
     if (rc != SQLITE_OK)
     {
@@ -66,6 +100,8 @@ DB::InternalExecute (const char *pSql)
         return false;
     }
     
+    InternalCreateUser ();
+    
     return true;
 }
 
@@ -77,178 +113,4 @@ DB::Close ()
         sqlite3_close (vDb);
         vDb = nullptr;
     }
-}
-
-bool
-DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCals)
-{
-        const char *    q = nullptr;
-        sqlite3_stmt*   st = nullptr;
-        bool            rc;
-    
-    if (!vDb)
-    {
-        return false;
-    }
-    
-    q = "INSERT OR REPLACE INTO meals (id, title, cals) VALUES (?, ?, ?);";
-    
-    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
-    {
-        return false;
-    }
-    
-    sqlite3_bind_text (st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text (st, 2, pTitle.c_str (), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_int (st, 3, pCals);
-    
-    rc = (sqlite3_step (st) == SQLITE_DONE);
-    return rc;
-}
-
-std::vector<tListItemContent>
-DB::GetMealsInv ()
-{
-        std::vector<tListItemContent>   res;
-        const char *                    sql = nullptr;
-        sqlite3_stmt*                   st = nullptr;
-    
-    if (!vDb)
-    {
-        return res;
-    }
-    
-    sql = "SELECT id, title, cals FROM meals;";
-    
-    if (sqlite3_prepare_v2(vDb, sql, -1, &st, nullptr) == SQLITE_OK)
-    {
-        while (sqlite3_step (st) == SQLITE_ROW)
-        {
-            tListItemContent meal;
-            
-            const unsigned char * id = sqlite3_column_text(st, 0);
-            const unsigned char * title = sqlite3_column_text(st, 1);
-            int cals = sqlite3_column_int(st, 2);
-            
-            meal.uId = id ? (const char *)id : "";
-            meal.uTitle = title ? (const char *)title : "";
-            meal.uCals = cals;
-            
-            res.push_back (meal);
-        }
-        sqlite3_finalize(st);
-    }
-    
-    return res;
-}
-
-bool
-DB::AddExInv(const std::string &pId, const std::string &pTitle, const int &pCals)
-{
-        const char *    q = nullptr;
-        sqlite3_stmt*   st = nullptr;
-        bool            rc;
-    
-    if (!vDb)
-    {
-        return false;
-    }
-    
-    q = "INSERT OR REPLACE INTO activities (id, title, cals) VALUES (?, ?, ?);";
-    
-    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
-    {
-        return false;
-    }
-    
-    sqlite3_bind_text (st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text (st, 2, pTitle.c_str (), -1, SQLITE_TRANSIENT);
-    sqlite3_bind_int (st, 3, pCals);
-    
-    rc = (sqlite3_step (st) == SQLITE_DONE);
-    return rc;
-}
-
-std::vector<tListItemContent>
-DB::GetExInv ()
-{
-        std::vector<tListItemContent>   res;
-        const char *                    sql = nullptr;
-        sqlite3_stmt*                   st = nullptr;
-    
-    if (!vDb)
-    {
-        return res;
-    }
-    
-    sql = "SELECT id, title, cals FROM activities;";
-    
-    if (sqlite3_prepare_v2(vDb, sql, -1, &st, nullptr) == SQLITE_OK)
-    {
-        while (sqlite3_step (st) == SQLITE_ROW)
-        {
-            tListItemContent meal;
-            
-            const unsigned char * id = sqlite3_column_text(st, 0);
-            const unsigned char * title = sqlite3_column_text(st, 1);
-            int cals = sqlite3_column_int(st, 2);
-            
-            meal.uId = id ? (const char *)id : "";
-            meal.uTitle = title ? (const char *)title : "";
-            meal.uCals = cals;
-            
-            res.push_back (meal);
-        }
-        sqlite3_finalize(st);
-    }
-    
-    return res;
-}
-
-bool
-DB::DelMealInv (const std::string &pId)
-{
-        const char *    q = "DELETE FROM meals WHERE id = ?;";
-        sqlite3_stmt *  st = nullptr;
-        bool            rc;
-    
-    if (!vDb)
-    {
-        return false;
-    }
-    
-    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
-    {
-        return false;
-    }
-    
-    sqlite3_bind_text(st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
-    rc = (sqlite3_step(st) == SQLITE_DONE);
-    sqlite3_finalize(st);
-    
-    return rc;
-}
-
-bool
-DB::DelExInv (const std::string &pId)
-{
-        const char *    q = "DELETE FROM activities WHERE id = ?;";
-        sqlite3_stmt *  st = nullptr;
-        bool            rc;
-    
-    if (!vDb)
-    {
-        return false;
-    }
-    
-    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
-    {
-        return false;
-    }
-    
-    sqlite3_bind_text(st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
-    rc = (sqlite3_step(st) == SQLITE_DONE);
-    sqlite3_finalize(st);
-    
-    return rc;
 }

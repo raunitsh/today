@@ -13,3 +13,13 @@ struct tListItemContent
     std::string uId;
     std::string uTitle;
 };
+
+struct tProfile
+{
+    std::string uName;
+    int         uId;
+    int         uAge;
+    int         uWeight;
+    int         uHeight;
+    int         uBmr;
+};

@@ -53,13 +53,25 @@
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		4CDEAE6F30711E5E00F33156 /* Exceptions for "coretoday" folder in "Headers" phase from "coretoday" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 4C5C00823070388F0006647F /* Headers */;
+			membershipExceptions = (
+				act.cpp,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		4C5C00883070388F0006647F /* coretoday */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				4C32551C30703F3E00C87EA8 /* Exceptions for "coretoday" folder in "coretoday" target */,
+				4CDEAE6F30711E5E00F33156 /* Exceptions for "coretoday" folder in "Headers" phase from "coretoday" target */,
 			);
 			explicitFileTypes = {
+				act.cpp = sourcecode.cpp.cpp;
 				db.hpp = sourcecode.cpp.h;
 			};
 			path = coretoday;
@@ -470,6 +482,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E5R2JZ6U5K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -502,6 +515,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = E5R2JZ6U5K;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

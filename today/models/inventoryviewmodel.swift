@@ -13,7 +13,7 @@ class InventoryViewModel
     static let shared = InventoryViewModel ();
     
     @MainActor
-    func LoadData () -> Void
+    func Init () -> Void
     {
         loading = true;
         

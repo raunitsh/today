@@ -14,9 +14,15 @@ struct MealsInv: View
     
     var body: some View
     {
-        ListWithTitle (contents: meals, title: "\(meals.count) meals")
-        {id in
-            InventoryViewModel.shared.delItem (id)
+        ListWithTitle (contents: meals, title: "\(meals.count) meals", pOnDelete: removeItem)
+        {item in
+
+            TodayViewModel.shared.EatMeal (item);
         }
+    }
+    
+    private func removeItem (_ pId: UUID)
+    {
+        InventoryViewModel.shared.delItem (pId);
     }
 }

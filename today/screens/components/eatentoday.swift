@@ -14,11 +14,14 @@ struct EatenToday: View
     
     var body: some View
     {
-        ListWithTitle(contents: v.eatenToday, title: "Eaten today")
-        {id in
-            v.eatenToday.removeAll {
-                $0.id == id;
-            }
+        ListWithTitle(contents: v.eatenToday, title: "Eaten today", pOnDelete: removeItem)
+        {_ in
+            // No tap action needed here
         }
+    }
+    
+    private func removeItem (_ pId: UUID) -> Void
+    {
+        v.eatenToday.removeAll { $0.id == pId };
     }
 }

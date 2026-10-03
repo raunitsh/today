@@ -28,7 +28,6 @@ struct ContentView: View
         .task
         {
             InitBackend ();
-            InventoryViewModel.shared.LoadData()
         }
     }
     
@@ -43,6 +42,9 @@ struct ContentView: View
                 {
                     print ("Backend init failed");
                 }
+                
+                UserViewModel.shared.Init ();
+                InventoryViewModel.shared.Init ()
             }
         }
     }

@@ -11,6 +11,24 @@ actor Backend
 {
     static let shared = Backend ();
     
+    public func LogMeal (_ pMealId: UUID)
+    {
+        vDb.LogMeal (std.string (pMealId.uuidString));
+    }
+    
+    public func LoadProfile () -> UserProfile
+    {
+        let prof = vDb.GetProf ();
+        
+        return UserProfile (
+            name: String (prof.uName),
+            age: prof.uAge,
+            weight: prof.uWeight,
+            height: prof.uHeight,
+            bmr: prof.uBmr
+        );
+    }
+    
     public func Init (_ pDocUrl: URL) -> Bool
     {
         let dbUrl = pDocUrl.appendingPathComponent ("today_db.sqlite");

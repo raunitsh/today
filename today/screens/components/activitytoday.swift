@@ -14,9 +14,14 @@ struct ActivityToday: View
  
     var body: some View
     {
-        ListWithTitle (contents: v.actToday, title: "Activity")
-        {id in
-            v.actToday.removeAll { $0.id == id }
+        ListWithTitle (contents: v.actToday, title: "Activity", pOnDelete: removeAct)
+        {_ in
+            // No tap action needed here
         }
+    }
+    
+    private func removeAct (_ pId: UUID) -> Void
+    {
+        v.actToday.removeAll { $0.id == pId };
     }
 }

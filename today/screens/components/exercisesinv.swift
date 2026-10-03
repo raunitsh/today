@@ -14,9 +14,14 @@ struct ExercisesInv: View
     
     var body: some View
     {
-        ListWithTitle (contents: activities, title: "\(activities.count) activities")
-        {id in
-            InventoryViewModel.shared.delItem (id)
+        ListWithTitle (contents: activities, title: "\(activities.count) activities", pOnDelete: removeAct)
+        {item in
+            
         }
+    }
+    
+    private func removeAct (_ pId: UUID) -> Void
+    {
+        InventoryViewModel.shared.delItem (pId);
     }
 }

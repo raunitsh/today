@@ -15,23 +15,28 @@
 class DB {
     
 public:
-                                    DB              ();
-                                    ~DB             ();
+                                    DB                  ();
+                                    ~DB                 ();
     
-    bool                            Open            (const std::string& pPath);
-    void                            Close           ();
+    bool                            Open                (const std::string& pPath);
+    void                            Close               ();
 
-    std::vector<tListItemContent>   GetMealsInv     ();
-    bool                            AddMealInv      (const std::string& pId, const std::string& pTitle, const int& pCals);
-    bool                            DelMealInv      (const std::string& pId);
+    std::vector<tListItemContent>   GetMealsInv         ();
+    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            DelMealInv          (const std::string& pId);
     
-    std::vector<tListItemContent>   GetExInv        ();
-    bool                            AddExInv        (const std::string& pId, const std::string& pTitle, const int& pCals);
-    bool                            DelExInv        (const std::string& pId);
+    std::vector<tListItemContent>   GetExInv            ();
+    bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            DelExInv            (const std::string& pId);
+    
+    tProfile                        GetProf             ();
+    
+    bool                            LogMeal             (const std::string& pMealId);
     
 private:
     
-    bool                            InternalExecute (const char * pSql);
+    bool                            InternalExecute     (const char * pSql);
+    void                            InternalCreateUser  ();
     
     struct sqlite3*                 vDb = nullptr;
 };

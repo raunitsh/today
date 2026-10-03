@@ -11,7 +11,8 @@ struct ListWithTitle: View
 {
     let contents: [ListItemContent];
     let title: String;
-    let pAction: (_ pItem: UUID) -> Void;
+    let pOnDelete: (_ pItem: UUID) -> Void;
+    let pOnItemTap: (_ pItem: ListItemContent) -> Void;
     
     var body: some View
     {
@@ -24,9 +25,9 @@ struct ListWithTitle: View
             
             ForEach (contents, id: \.id)
             {item in
-                ListItem (pTitle: item.title, pCals: item.cals)
-                {
-                    pAction (item.id)
+                ListItem (pItem: item, pOnDelete: onItemDelete)
+                {item in
+                    pOnItemTap (item);
                 }
                 
                 if item.id != contents.last?.id
@@ -36,5 +37,10 @@ struct ListWithTitle: View
             }
         }
         .padding(.top)
-    }    
+    }
+    
+    private func onItemDelete (_ pItem: ListItemContent) -> Void
+    {
+        pOnDelete (pItem.id)
+    }
 }
