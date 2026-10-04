@@ -22,6 +22,7 @@ public:
     void                            Close               ();
 
     std::vector<tListItemContent>   GetMealsInv         ();
+    bool                            LogMeal             (const std::string& pMealId);
     bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals);
     bool                            DelMealInv          (const std::string& pId);
     
@@ -31,10 +32,12 @@ public:
     
     tProfile                        GetProf             ();
     
-    bool                            LogMeal             (const std::string& pMealId);
+    tToday                          GetToday            ();
+    std::vector<tListItemContent>   GetTodayMeals       ();
     
 private:
     
+    bool                            InternalMapMeal     (const char * pDate, const char * pMealId);
     bool                            InternalExecute     (const char * pSql);
     void                            InternalCreateUser  ();
     

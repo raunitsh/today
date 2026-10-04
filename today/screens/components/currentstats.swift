@@ -30,7 +30,7 @@ struct CurrentStats: View
         {
             HStack (alignment: .bottom)
             {
-                Text ("\(v.deficit)")
+                Text ("\(v.today.deficit)")
                     .font(.largeTitle)
                     .bold()
                 Text ("kcal")
@@ -45,7 +45,7 @@ struct CurrentStats: View
                 Text ("BMR")
                 Text ("\(bmr)")
                 Text ("Eaten")
-                Text ("\(v.eaten)")
+                Text ("\(v.today.consumed)")
             }
             .font(.footnote)
             .debug()

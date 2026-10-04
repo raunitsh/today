@@ -87,3 +87,19 @@ struct UserProfile: Sendable
         self.bmr = bmr
     }
 }
+
+struct Today: Sendable
+{
+    let date:       String;
+    let deficit:    Int32;
+    let consumed:   Int32;
+    let updated:    Int64;
+    
+    nonisolated init (date: String, deficit: Int32, consumed: Int32, updated: Int64)
+    {
+        self.date = date
+        self.deficit = deficit
+        self.consumed = consumed
+        self.updated = updated
+    }
+}

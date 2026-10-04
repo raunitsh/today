@@ -34,7 +34,7 @@ struct DateAndStreak: View
         {
             VStack (alignment: .leading)
             {
-                Text (v.date)
+                Text (v.today.date)
                     .font(.title3)
                 Text ("Daily Deficit")
                     .font(.footnote)

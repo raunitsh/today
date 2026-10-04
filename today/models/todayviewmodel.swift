@@ -12,22 +12,24 @@ class TodayViewModel
 {
     static let shared = TodayViewModel ();
     
-    @MainActor
     func Init () -> Void
     {
-        
+        Task
+        {
+            today = await Backend.shared.GetToday ();
+            eatenToday = await Backend.shared.GetTodayMeals ();
+        }
     }
     
-    // push meal today
-    // log in backend
     func EatMeal (_ pMeal: ListItemContent) -> Void
     {
         Task
         {
-            await Backend.shared.LogMeal (pMeal.id);
+            if await Backend.shared.LogMeal (pMeal.id)
+            {
+                eatenToday.append (pMeal);
+            }
         }
-        
-//        eatenToday.append (pMeal);
     }
     
     func Workout (_ pAct: ListItemContent) -> Void
@@ -35,14 +37,8 @@ class TodayViewModel
         actToday.append (pAct);
     }
     
-    var date:       String            = "Fri 2 Oct";
     var streak:     Int               = 12;
-    var burn:       Int               = 2190;
-    var eaten:      Int               = 1150;
+    var today:      Today             = Today (date: "", deficit: 0, consumed: 0, updated: 0);
     var eatenToday: [ListItemContent] = [];
     var actToday:   [ListItemContent] = [];
-    var deficit:    Int
-    {
-        eaten - burn
-    }
 }

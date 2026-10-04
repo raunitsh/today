@@ -44,7 +44,8 @@ struct ContentView: View
                 }
                 
                 UserViewModel.shared.Init ();
-                InventoryViewModel.shared.Init ()
+                TodayViewModel.shared.Init ();
+                InventoryViewModel.shared.Init ();
             }
         }
     }

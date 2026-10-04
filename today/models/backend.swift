@@ -11,9 +11,33 @@ actor Backend
 {
     static let shared = Backend ();
     
-    public func LogMeal (_ pMealId: UUID)
+    public func GetTodayMeals () -> [ListItemContent]
     {
-        vDb.LogMeal (std.string (pMealId.uuidString));
+        let res = vDb.GetTodayMeals ();
+        var meals: [ListItemContent] = [];
+        
+        for item in res
+        {
+            meals.append(ListItemContent(
+                id: UUID (uuidString: String (item.uId)) ?? UUID (),
+                title: String (item.uTitle),
+                cals: item.uCals
+            ));
+        }
+        
+        return meals;
+    }
+    
+    public func GetToday () -> Today
+    {
+        let res: tToday =  vDb.GetToday ();
+        
+        return Today(date: String (res.uDate), deficit: res.uDeficit, consumed: res.uConsumed, updated: res.uUpdated);
+    }
+    
+    public func LogMeal (_ pMealId: UUID) -> Bool
+    {
+        return vDb.LogMeal (std.string (pMealId.uuidString));
     }
     
     public func LoadProfile () -> UserProfile

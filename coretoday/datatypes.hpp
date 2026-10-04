@@ -23,3 +23,11 @@ struct tProfile
     int         uHeight;
     int         uBmr;
 };
+
+struct tToday
+{
+    std::string uDate;
+    int         uDeficit;
+    int         uConsumed;
+    int64_t     uUpdated;
+};
