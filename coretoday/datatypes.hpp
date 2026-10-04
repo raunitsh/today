@@ -10,6 +10,7 @@
 struct tListItemContent
 {
     int         uCals;
+    int         uRecordId = 0;
     std::string uId;
     std::string uTitle;
 };

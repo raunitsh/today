@@ -80,10 +80,9 @@ DB::GetTodayMeals ()
     {
         tListItemContent meal;
         
-        const unsigned char * id = sqlite3_column_text(st, 0);
         const unsigned char * name = sqlite3_column_text(st, 1);
         
-        meal.uId = id ? (const char *)id : "";
+        meal.uRecordId = sqlite3_column_int(st, 0);
         meal.uTitle = name ? (const char *)name: "";
         meal.uCals = sqlite3_column_int(st, 2);
         
@@ -94,4 +93,53 @@ DB::GetTodayMeals ()
     delete[] date;
     
     return res;
+}
+
+std::vector<tListItemContent>
+DB::GetTodayEx ()
+{
+        std::vector<tListItemContent>   res;
+        sqlite3_stmt *                  st;
+        char *                          date;
+        const char *                    q = R"(
+            SELECT ta.id, a.title, a.cals
+            FROM today_act ta
+            JOIN activities a ON ta.act_id = a.id
+            WHERE ta.entry_date = ?
+            ORDER BY ta.id ASC;
+        )";
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
+    {
+        return {};
+    }
+    
+    date = new char [11];
+    GetTodayDate (date);
+    
+    sqlite3_bind_text(st, 1, date, -1, SQLITE_TRANSIENT);
+    
+    while (sqlite3_step(st) == SQLITE_ROW)
+    {
+        tListItemContent act;
+        
+        const unsigned char * name = sqlite3_column_text(st, 1);
+        
+        act.uRecordId = sqlite3_column_int(st, 0);
+        act.uTitle = name ? (const char *)name: "";
+        act.uCals = sqlite3_column_int(st, 2);
+        
+        res.push_back (act);
+    }
+    
+    sqlite3_finalize(st);
+    delete[] date;
+    
+    return res;
+}
+
+bool
+DB::DelTodayEx (const int pId)
+{
+    return true;
 }

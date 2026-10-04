@@ -23,10 +23,13 @@ public:
 
     std::vector<tListItemContent>   GetMealsInv         ();
     bool                            LogMeal             (const std::string& pMealId);
+    bool                            UnLogMeal           (const int pRecordId);
     bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals);
     bool                            DelMealInv          (const std::string& pId);
     
     std::vector<tListItemContent>   GetExInv            ();
+    bool                            LogEx               (const std::string& pActId);
+    bool                            UnLogEx             (const int pRecordId);
     bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals);
     bool                            DelExInv            (const std::string& pId);
     
@@ -34,10 +37,16 @@ public:
     
     tToday                          GetToday            ();
     std::vector<tListItemContent>   GetTodayMeals       ();
+    std::vector<tListItemContent>   GetTodayEx          ();
+    bool                            DelTodayMeal        (const int pId);
+    bool                            DelTodayEx          (const int pId);
     
 private:
     
     bool                            InternalMapMeal     (const char * pDate, const char * pMealId);
+    bool                            InternalUnmapMeal   (const int pRecordId);
+    bool                            InternalMapEx       (const char * pDate, const char * pMealId);
+    bool                            InternalUnmapEx     (const int pRecordId);
     bool                            InternalExecute     (const char * pSql);
     void                            InternalCreateUser  ();
     

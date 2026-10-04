@@ -11,7 +11,7 @@ struct ListWithTitle: View
 {
     let contents: [ListItemContent];
     let title: String;
-    let pOnDelete: (_ pItem: UUID) -> Void;
+    let pOnDelete: (_ pItem: ListItemContent) -> Void;
     let pOnItemTap: (_ pItem: ListItemContent) -> Void;
     
     var body: some View
@@ -23,14 +23,14 @@ struct ListWithTitle: View
                 .bold()
             Divider ()
             
-            ForEach (contents, id: \.id)
+            ForEach (contents, id: \.compositeId)
             {item in
                 ListItem (pItem: item, pOnDelete: onItemDelete)
                 {item in
                     pOnItemTap (item);
                 }
                 
-                if item.id != contents.last?.id
+                if item.compositeId != contents.last?.compositeId
                 {
                     Divider ()
                 }
@@ -41,6 +41,6 @@ struct ListWithTitle: View
     
     private func onItemDelete (_ pItem: ListItemContent) -> Void
     {
-        pOnDelete (pItem.id)
+        pOnDelete (pItem)
     }
 }

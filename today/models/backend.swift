@@ -19,13 +19,30 @@ actor Backend
         for item in res
         {
             meals.append(ListItemContent(
-                id: UUID (uuidString: String (item.uId)) ?? UUID (),
+                recordId: item.uRecordId,
                 title: String (item.uTitle),
                 cals: item.uCals
             ));
         }
         
         return meals;
+    }
+    
+    public func GetTodayActivities () -> [ListItemContent]
+    {
+        let res = vDb.GetTodayEx ();
+        var act: [ListItemContent] = [];
+        
+        for item in res
+        {
+            act.append(ListItemContent(
+                recordId: item.uRecordId,
+                title: String (item.uTitle),
+                cals: item.uCals
+            ));
+        }
+        
+        return act;
     }
     
     public func GetToday () -> Today
@@ -38,6 +55,21 @@ actor Backend
     public func LogMeal (_ pMealId: UUID) -> Bool
     {
         return vDb.LogMeal (std.string (pMealId.uuidString));
+    }
+    
+    public func UnLogMeal (_ pRecordId: Int32) -> Bool
+    {
+        return vDb.UnLogMeal (pRecordId);
+    }
+    
+    public func LogAct (_ pActId: UUID) -> Bool
+    {
+        return vDb.LogEx (std.string (pActId.uuidString));
+    }
+    
+    public func UnLogAct (_ pRecordId: Int32) -> Bool
+    {
+        return vDb.UnLogEx (pRecordId);
     }
     
     public func LoadProfile () -> UserProfile

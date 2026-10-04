@@ -12,17 +12,37 @@ struct MealsInv: View
     @Binding
     var meals: [ListItemContent];
     
+    @State
+    var showAlert: Bool = false;
+    
+    @State
+    var selected: ListItemContent?;
+    
+    let title = InventoryViewModel.shared.viewType == .meals ? "meal" : "workout";
+    
     var body: some View
     {
         ListWithTitle (contents: meals, title: "\(meals.count) meals", pOnDelete: removeItem)
         {item in
-
-            TodayViewModel.shared.EatMeal (item);
+            
+            selected = item;
+            showAlert = true;
+        }
+        .alert("Log \(title)?", isPresented: $showAlert)
+        {
+            Button ("Yes")
+            {
+                if selected != nil {
+                    TodayViewModel.shared.EatMeal (selected!);
+                }
+            }
+            
+            Button ("Cancel", role: .close) {}
         }
     }
     
-    private func removeItem (_ pId: UUID)
+    private func removeItem (_ pItem: ListItemContent)
     {
-        InventoryViewModel.shared.delItem (pId);
+        InventoryViewModel.shared.delItem (pItem.id);
     }
 }

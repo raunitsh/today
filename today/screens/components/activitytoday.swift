@@ -11,17 +11,35 @@ struct ActivityToday: View
 {
     @Bindable
     var v = TodayViewModel.shared;
- 
+    
+    @State
+    var showAlert: Bool = false;
+    
+    @State
+    var selected: ListItemContent?;
+    
     var body: some View
     {
         ListWithTitle (contents: v.actToday, title: "Activity", pOnDelete: removeAct)
         {_ in
             // No tap action needed here
         }
+        .alert("Delete log?", isPresented: $showAlert)
+        {
+            Button ("Yes")
+            {
+                if selected != nil {
+                    TodayViewModel.shared.DeleteWorkout (selected!);
+                }
+            }
+            
+            Button ("Cancel", role: .close) {}
+        }
     }
     
-    private func removeAct (_ pId: UUID) -> Void
+    private func removeAct (_ pItem: ListItemContent) -> Void
     {
-        v.actToday.removeAll { $0.id == pId };
+        selected = pItem;
+        showAlert = true;
     }
 }

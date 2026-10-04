@@ -50,15 +50,28 @@ struct ListItem: View
 
 struct ListItemContent: Identifiable, Sendable
 {
-    let id: UUID
+    let id: UUID;
     let title: String
     let cals: Int32
+    var recordId: Int32 = 0;
+    
+    var compositeId: String {
+        "\(recordId)-\(id)"
+    }
 
     nonisolated init(id: UUID = UUID(), title: String, cals: Int32)
     {
         self.id = id
         self.title = title
         self.cals = cals
+    }
+    
+    nonisolated init(recordId: Int32, title: String, cals: Int32)
+    {
+        self.recordId = recordId
+        self.title = title
+        self.cals = cals
+        self.id = UUID ()
     }
 }
 
