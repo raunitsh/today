@@ -27,7 +27,7 @@ struct ContentView: View
                 .tag(eTab.INVENTORY)
             
             NavigationStack
-            { SummaryScreen () }.tabItem
+            { ProgressScreen () }.tabItem
             { Label ("Progress", systemImage: "chart.bar") }
                 .tag(eTab.PROGRESS)
         }

@@ -23,3 +23,21 @@ extension View
         modifier(BorderModifier ());
     }
 }
+
+struct CardModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color(.secondarySystemBackground))
+            )
+    }
+}
+
+extension View {
+    func asCard() -> some View {
+        modifier(CardModifier())
+    }
+}

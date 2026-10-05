@@ -7,54 +7,13 @@
 
 import SwiftUI
 
-struct ListItem: View
+struct Progress: Sendable
 {
-    let pItem: ListItemContent;
+    let totalDeficit: Int32;
     
-    let pOnDelete: (_ pItem: ListItemContent) -> Void;
-    let pOnTap:  (_ pItem: ListItemContent) -> Void;
-    
-    var body: some View
+    nonisolated init(totalDeficit: Int32)
     {
-        HStack
-        {
-            HStack
-            {
-                Text (pItem.icon)
-                    .font(.title)
-                
-                VStack (alignment: .leading)
-                {
-                    Text (pItem.title).font(.body)
-                    
-                    HStack
-                    {
-                        Text ("\(pItem.cals) kcal").font(.footnote)
-                        
-                        if pItem.protein > 0
-                        {
-                            Text ("\(pItem.protein) g").font(.footnote)
-                        }
-                    }
-                }
-                
-                Spacer()
-            }
-            .contentShape(Rectangle())
-            .onTapGesture
-            {
-                pOnTap (pItem);
-            }
-            Button ("delete", systemImage: "xmark")
-            {
-                pOnDelete (pItem);
-            }
-                .labelStyle(.iconOnly)
-                .tint(.gray)
-        }
-        .listRowInsets(EdgeInsets())
-        .frame(maxWidth: .infinity)
-        
+        self.totalDeficit = totalDeficit
     }
 }
 
@@ -104,6 +63,14 @@ enum eTab: Hashable
     case TODAY;
     case INVENTORY;
     case PROGRESS;
+}
+
+enum eProgressDuration: String, CaseIterable, Identifiable
+{
+    case WEEK   = "Week";
+    case MONTH  = "Month";
+    
+    var id: String {rawValue}
 }
 
 struct UserProfile: Sendable

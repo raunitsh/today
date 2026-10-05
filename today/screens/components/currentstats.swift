@@ -59,22 +59,6 @@ struct CurrentStats: View
                 {
                     HStack
                     {
-                        Text ("BMR")
-                        Text ("\(bmr)")
-                            .contentTransition(.numericText())
-                            .animation(.snappy, value: bmr)
-                    }
-                    
-                    HStack
-                    {
-                        Text ("Eaten")
-                        Text ("\(v.today.consumed)")
-                            .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.consumed)
-                    }
-                    
-                    HStack
-                    {
                         Text ("Protein")
                         Text ("\(v.today.protein)g")
                             .contentTransition(.numericText())
@@ -83,13 +67,30 @@ struct CurrentStats: View
                     
                     HStack
                     {
+                        Text ("BMR")
+                        Text ("\(bmr)kcal")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: bmr)
+                    }
+                    
+                    HStack
+                    {
+                        Text ("Eaten")
+                        Text ("\(v.today.consumed)kcal")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: v.today.consumed)
+                    }
+                    
+                    HStack
+                    {
                         Text ("Active")
-                        Text ("\(v.today.active) kcal")
+                        Text ("\(v.today.active)kcal")
                             .contentTransition(.numericText())
                             .animation(.snappy, value: v.today.consumed)
                     }
                 }
-                .font(.caption)
+                .font(.caption2)
+                .fontDesign(.monospaced)
             }
             VisualProgress ()
         }
