@@ -24,7 +24,7 @@ public:
     std::vector<tListItemContent>   GetMealsInv         ();
     bool                            LogMeal             (const std::string& pMealId);
     bool                            UnLogMeal           (const int pRecordId);
-    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals, const std::string& pIcon);
+    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals, const int& pProtein, const std::string& pIcon);
     bool                            DelMealInv          (const std::string& pId);
     
     std::vector<tListItemContent>   GetExInv            ();

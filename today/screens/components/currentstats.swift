@@ -75,6 +75,14 @@ struct CurrentStats: View
                     
                     HStack
                     {
+                        Text ("Protein")
+                        Text ("\(v.today.protein)g")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: v.today.protein)
+                    }
+                    
+                    HStack
+                    {
                         Text ("Active")
                         Text ("\(v.today.active) kcal")
                             .contentTransition(.numericText())

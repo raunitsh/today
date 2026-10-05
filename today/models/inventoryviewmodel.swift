@@ -26,9 +26,9 @@ class InventoryViewModel
         loading = false;
     }
     
-    func addItem (_ pTitle: String, _ pCals: Int32, _ pIcon: String) -> Void
+    func addItem (_ pTitle: String, _ pCals: Int32, _ pProtein: Int32, _ pIcon: String) -> Void
     {
-        let item = ListItemContent(title: pTitle, cals: pCals, icon: pIcon);
+        let item = ListItemContent(title: pTitle, cals: pCals, protein: pProtein, icon: pIcon);
         
         if viewType == .meals
         {

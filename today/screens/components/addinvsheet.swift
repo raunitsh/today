@@ -21,6 +21,9 @@ struct AddInvSheet: View
     @State
     private var cals: Int32 = 500;
     
+    @State
+    private var protein: Int32 = 24;
+    
     private var iconlist: [String]
     {
         pViewType == .meals ? mealIcons : actIcons
@@ -30,7 +33,7 @@ struct AddInvSheet: View
     private var selectedIcon: String = "";
     
     let pViewType: ViewType;
-    let pSubmit: (_ pTitle: String, _ pCals: Int32, _ pIcon: String) -> Void;
+    let pSubmit: (_ pTitle: String, _ pCals: Int32, _ pProtein: Int32, _ pIcon: String) -> Void;
     
     var body: some View
     {
@@ -38,7 +41,6 @@ struct AddInvSheet: View
         {
             VStack
             {
-                
                 ScrollView (.horizontal)
                 {
                     HStack
@@ -77,10 +79,26 @@ struct AddInvSheet: View
                 
                 HStack
                 {
-                    TextField ("Calories", value: $cals, format: .number)
-                        .textFieldStyle(.roundedBorder)
-                        .keyboardType(.numberPad)
-                    Text ("kcal")
+                    HStack
+                    {
+                        TextField ("Calories", value: $cals, format: .number)
+                            .textFieldStyle(.roundedBorder)
+                            .keyboardType(.numberPad)
+                        Text ("kcal")
+                    }
+                    
+                    if (pViewType == .meals)
+                    {
+                        Spacer ()
+                        
+                        HStack
+                        {
+                            TextField ("Protein", value: $protein, format: .number)
+                                .textFieldStyle(.roundedBorder)
+                                .keyboardType(.numberPad)
+                            Text ("gm")
+                        }
+                    }
                 }
             }
             .padding(24)
@@ -94,7 +112,7 @@ struct AddInvSheet: View
                 ToolbarItem (placement: .confirmationAction) {
                     Button ("Done")
                     {
-                        pSubmit (title, cals, selectedIcon);
+                        pSubmit (title, cals, protein, selectedIcon);
                         dismiss ()
                     }
                     .tint(.blue)

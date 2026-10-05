@@ -28,6 +28,7 @@ DB::Open (const std::string &pPath)
                 id      TEXT    PRIMARY KEY NOT NULL,
                 title   TEXT                NOT NULL,
                 cals    INTEGER             NOT NULL,
+                protein INTEGER             NOT NULL,
                 icon    TEXT                NOT NULL,
                 del     INTEGER             NOT NULL DEFAULT 0
             );
@@ -50,6 +51,7 @@ DB::Open (const std::string &pPath)
             CREATE TABLE IF NOT EXISTS  today (
                 date        TEXT    PRIMARY KEY,
                 consumed    INTEGER NOT NULL    DEFAULT 0,
+                protein     INTEGER NOT NULL    DEFAULT 0,
                 active      INTEGER NOT NULL    DEFAULT 0,
                 deficit     INTEGER NOT NULL    DEFAULT 0,
                 created_at  INTEGER NOT NULL,

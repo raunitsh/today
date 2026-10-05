@@ -10,6 +10,7 @@
 struct tListItemContent
 {
     int         uCals;
+    int         uProtein;
     int         uRecordId = 0;
     std::string uId;
     std::string uTitle;
@@ -31,6 +32,7 @@ struct tToday
     std::string uDate;
     int         uDeficit;
     int         uConsumed;
+    int         uProtein;
     int         uActive;
     int64_t     uUpdated;
 };

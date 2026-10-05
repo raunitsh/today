@@ -51,7 +51,7 @@ DB::GetMealsInv ()
         return res;
     }
     
-    sql = "SELECT id, title, cals, icon FROM meals WHERE del = 0;";
+    sql = "SELECT id, title, cals, protein, icon FROM meals WHERE del = 0;";
     
     if (sqlite3_prepare_v2(vDb, sql, -1, &st, nullptr) == SQLITE_OK)
     {
@@ -62,11 +62,12 @@ DB::GetMealsInv ()
             const unsigned char * id = sqlite3_column_text(st, 0);
             const unsigned char * title = sqlite3_column_text(st, 1);
             int cals = sqlite3_column_int(st, 2);
-            const unsigned char * icon = sqlite3_column_text(st, 3);
+            const unsigned char * icon = sqlite3_column_text(st, 4);
             
             meal.uId = id ? (const char *)id : "";
             meal.uTitle = title ? (const char *)title : "";
             meal.uCals = cals;
+            meal.uProtein = sqlite3_column_int(st, 3);
             meal.uIcon = icon ? (const char *)icon: "";
             
             res.push_back (meal);
@@ -78,7 +79,7 @@ DB::GetMealsInv ()
 }
 
 bool
-DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCals, const std::string& pIcon)
+DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCals, const int& pProtein, const std::string& pIcon)
 {
         const char *    q = nullptr;
         sqlite3_stmt*   st = nullptr;
@@ -89,7 +90,7 @@ DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCa
         return false;
     }
     
-    q = "INSERT OR REPLACE INTO meals (id, title, cals, icon) VALUES (?, ?, ?, ?);";
+    q = "INSERT OR REPLACE INTO meals (id, title, cals, protein, icon) VALUES (?, ?, ?, ?, ?);";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
     {
@@ -99,7 +100,8 @@ DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCa
     sqlite3_bind_text (st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text (st, 2, pTitle.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int (st, 3, pCals);
-    sqlite3_bind_text(st, 4, pIcon.c_str (), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(st, 4, pProtein);
+    sqlite3_bind_text(st, 5, pIcon.c_str (), -1, SQLITE_TRANSIENT);
     
     rc = (sqlite3_step (st) == SQLITE_DONE);
     sqlite3_finalize(st);
@@ -118,13 +120,15 @@ bool
 DB::LogMeal (const std::string& pMealId)
 {
         int meal_cals = -1;
+        int meal_protein = 0;
         int bmr = -1;
-        const char * q = "SELECT cals FROM meals WHERE id = ?;";
+        const char * q = "SELECT cals, protein FROM meals WHERE id = ?;";
         char * curr_date;
         int64_t created = 0;
         int64_t updated = 0;
         int consumed = 0;
         int deficit = 0;
+        int protein_today = 0;
         int rc;
         sqlite3_stmt * st_meal;
         sqlite3_stmt * st_bmr;
@@ -153,6 +157,7 @@ DB::LogMeal (const std::string& pMealId)
     }
     
     meal_cals = sqlite3_column_int (st_meal, 0);
+    meal_protein = sqlite3_column_int(st_meal, 1);
     
     sqlite3_finalize(st_meal);
     
@@ -179,7 +184,7 @@ DB::LogMeal (const std::string& pMealId)
     curr_date = new char [11];
     GetTodayDate (curr_date);
     
-    q = "SELECT consumed, deficit FROM today where date = ?;";
+    q = "SELECT consumed, deficit, protein FROM today where date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_today, nullptr) != SQLITE_OK)
     {
@@ -196,13 +201,15 @@ DB::LogMeal (const std::string& pMealId)
         // Record exists
         consumed = sqlite3_column_int(st_today, 0);
         deficit = sqlite3_column_int(st_today, 1);
+        protein_today = sqlite3_column_int(st_today, 2);
         
         sqlite3_finalize(st_today);
         
         consumed += meal_cals;
         deficit += meal_cals;
+        protein_today += meal_protein;
 
-        q = "UPDATE today SET consumed = ?, deficit = ?, updated_at = ? WHERE date = ?;";
+        q = "UPDATE today SET consumed = ?, deficit = ?, protein = ?, updated_at = ? WHERE date = ?;";
         
         if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
         {
@@ -214,8 +221,9 @@ DB::LogMeal (const std::string& pMealId)
 
         sqlite3_bind_int(st_new, 1, consumed);
         sqlite3_bind_int(st_new, 2, deficit);
-        sqlite3_bind_int64(st_new, 3, updated);
-        sqlite3_bind_text(st_new, 4, curr_date, -1, SQLITE_TRANSIENT);
+        sqlite3_bind_int(st_new, 3, protein_today);
+        sqlite3_bind_int64(st_new, 4, updated);
+        sqlite3_bind_text(st_new, 5, curr_date, -1, SQLITE_TRANSIENT);
         
         rc = (sqlite3_step(st_new) == SQLITE_DONE);
         
@@ -234,7 +242,7 @@ DB::LogMeal (const std::string& pMealId)
         // No existing record for today
         sqlite3_finalize(st_today);
         
-        q = "INSERT INTO today (date, consumed, deficit, created_at, updated_at) VALUES (?, ?, ?, ?, ?);";
+        q = "INSERT INTO today (date, consumed, deficit, protein, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?);";
         
         if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
         {
@@ -243,6 +251,7 @@ DB::LogMeal (const std::string& pMealId)
         }
         
         consumed += meal_cals;
+        protein_today += meal_protein;
         deficit = consumed - bmr;
         created = GetNow();
         updated = GetNow();
@@ -250,8 +259,9 @@ DB::LogMeal (const std::string& pMealId)
         sqlite3_bind_text(st_new, 1, curr_date, -1, SQLITE_TRANSIENT);
         sqlite3_bind_int(st_new, 2, consumed);
         sqlite3_bind_int(st_new, 3, deficit);
-        sqlite3_bind_int64(st_new, 4, created);
-        sqlite3_bind_int64(st_new, 5, updated);
+        sqlite3_bind_int(st_new, 4, protein_today);
+        sqlite3_bind_int64(st_new, 5, created);
+        sqlite3_bind_int64(st_new, 6, updated);
         
         rc = (sqlite3_step(st_new) == SQLITE_DONE);
         sqlite3_finalize(st_new);
@@ -277,17 +287,19 @@ bool
 DB::UnLogMeal (const int pRecordId)
 {
         int meal_cals = -1;
+        int meal_protein = 0;
         char * curr_date;
         int64_t updated = 0;
         int consumed = 0;
         int deficit = 0;
+        int protein_today = 0;
         int rc;
         sqlite3_stmt * st_rec;
         sqlite3_stmt * st_today;
         sqlite3_stmt * st_new;
     
         const char * q = R"(
-            SELECT m.cals
+            SELECT m.cals, m.protein
             FROM today_meals tm
             JOIN meals m ON tm.meal_id = m.id
             WHERE tm.id = ?
@@ -316,13 +328,14 @@ DB::UnLogMeal (const int pRecordId)
     }
     
     meal_cals = sqlite3_column_int (st_rec, 0);
+    meal_protein = sqlite3_column_int(st_rec, 1);
     
     sqlite3_finalize(st_rec);
     
     curr_date = new char [11];
     GetTodayDate (curr_date);
     
-    q = "SELECT consumed, deficit FROM today where date = ?;";
+    q = "SELECT consumed, deficit, protein FROM today where date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_today, nullptr) != SQLITE_OK)
     {
@@ -345,13 +358,15 @@ DB::UnLogMeal (const int pRecordId)
     // Record exists
     consumed = sqlite3_column_int(st_today, 0);
     deficit = sqlite3_column_int(st_today, 1);
+    protein_today = sqlite3_column_int(st_today, 2);
     
     sqlite3_finalize(st_today);
     
     consumed -= meal_cals;
     deficit -= meal_cals;
+    protein_today -= meal_protein;
 
-    q = "UPDATE today SET consumed = ?, deficit = ?, updated_at = ? WHERE date = ?;";
+    q = "UPDATE today SET consumed = ?, deficit = ?, protein = ?, updated_at = ? WHERE date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
     {
@@ -363,8 +378,9 @@ DB::UnLogMeal (const int pRecordId)
 
     sqlite3_bind_int(st_new, 1, consumed);
     sqlite3_bind_int(st_new, 2, deficit);
-    sqlite3_bind_int64(st_new, 3, updated);
-    sqlite3_bind_text(st_new, 4, curr_date, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(st_new, 3, protein_today);
+    sqlite3_bind_int64(st_new, 4, updated);
+    sqlite3_bind_text(st_new, 5, curr_date, -1, SQLITE_TRANSIENT);
     
     rc = (sqlite3_step(st_new) == SQLITE_DONE);
     

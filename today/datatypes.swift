@@ -20,15 +20,22 @@ struct ListItem: View
         {
             HStack
             {
-//                Image (systemName: pItem.icon)
-//                    .frame(width: 28, alignment: .center)
                 Text (pItem.icon)
                     .font(.title)
                 
                 VStack (alignment: .leading)
                 {
                     Text (pItem.title).font(.body)
-                    Text ("\(pItem.cals) kcal").font(.footnote)
+                    
+                    HStack
+                    {
+                        Text ("\(pItem.cals) kcal").font(.footnote)
+                        
+                        if pItem.protein > 0
+                        {
+                            Text ("\(pItem.protein) g").font(.footnote)
+                        }
+                    }
                 }
                 
                 Spacer()
@@ -56,6 +63,7 @@ struct ListItemContent: Identifiable, Sendable
     let id: UUID;
     let title: String
     let cals: Int32
+    let protein: Int32
     var recordId: Int32 = 0;
     let icon: String;
     
@@ -63,21 +71,23 @@ struct ListItemContent: Identifiable, Sendable
         "\(recordId)-\(id)"
     }
 
-    nonisolated init(id: UUID = UUID(), title: String, cals: Int32, icon: String)
+    nonisolated init(id: UUID = UUID(), title: String, cals: Int32, protein: Int32, icon: String)
     {
         self.id = id
         self.title = title
         self.cals = cals
         self.icon = icon
+        self.protein = protein
     }
     
-    nonisolated init(recordId: Int32, title: String, cals: Int32, icon: String)
+    nonisolated init(recordId: Int32, title: String, cals: Int32, protein: Int32, icon: String)
     {
         self.recordId = recordId
         self.title = title
         self.cals = cals
         self.id = UUID ()
         self.icon = icon;
+        self.protein = protein
     }
 }
 
@@ -119,15 +129,17 @@ struct Today: Sendable
     let date:       String;
     let deficit:    Int32;
     let consumed:   Int32;
+    let protein:    Int32;
     let active:     Int32;
     let updated:    Int64;
     
-    nonisolated init (date: String, deficit: Int32, consumed: Int32, active: Int32, updated: Int64)
+    nonisolated init (date: String, deficit: Int32, consumed: Int32, protein: Int32, active: Int32, updated: Int64)
     {
-        self.date = date
-        self.deficit = deficit
-        self.consumed = consumed
+        self.date = date;
+        self.deficit = deficit;
+        self.consumed = consumed;
         self.active = active;
-        self.updated = updated
+        self.updated = updated;
+        self.protein = protein;
     }
 }

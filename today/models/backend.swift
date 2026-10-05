@@ -22,6 +22,7 @@ actor Backend
                 recordId: item.uRecordId,
                 title: String (item.uTitle),
                 cals: item.uCals,
+                protein: item.uProtein,
                 icon: String (item.uIcon)
             ));
         }
@@ -40,6 +41,7 @@ actor Backend
                 recordId: item.uRecordId,
                 title: String (item.uTitle),
                 cals: item.uCals,
+                protein: 0,
                 icon: String (item.uIcon)
             ));
         }
@@ -51,7 +53,14 @@ actor Backend
     {
         let res: tToday =  vDb.GetToday ();
         
-        return Today(date: String (res.uDate), deficit: res.uDeficit, consumed: res.uConsumed, active: res.uActive, updated: res.uUpdated);
+        return Today (
+            date: String (res.uDate),
+            deficit: res.uDeficit,
+            consumed: res.uConsumed,
+            protein: res.uProtein,
+            active: res.uActive,
+            updated: res.uUpdated
+        );
     }
     
     public func LogMeal (_ pMealId: UUID) -> Bool
@@ -108,7 +117,7 @@ actor Backend
         let id = std.string (pMeal.id.uuidString);
         let icon = std.string (pMeal.icon);
         
-        return vDb.AddMealInv(id, title, cals, icon);
+        return vDb.AddMealInv(id, title, cals, pMeal.protein, icon);
     }
     
     public func AddActInv (_ pMeal: ListItemContent) -> Bool
@@ -133,7 +142,13 @@ actor Backend
             let cals = meal.uCals;
             let icon = String (meal.uIcon);
             
-            meals.append (ListItemContent (id: id, title: title, cals: cals, icon: icon))
+            meals.append (ListItemContent (
+                id: id,
+                title: title,
+                cals: cals,
+                protein: meal.uProtein,
+                icon: icon)
+            )
         }
         
         return meals;
@@ -147,6 +162,7 @@ actor Backend
                 id: UUID(uuidString: String(act.uId)) ?? UUID(),
                 title: String(act.uTitle),
                 cals: act.uCals,
+                protein: 0,
                 icon: String (act.uIcon)
             )
         }

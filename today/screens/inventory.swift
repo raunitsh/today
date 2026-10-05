@@ -13,7 +13,7 @@ struct InvHeader: View
     var showSheet: Bool = false;
     var pViewType: ViewType;
     
-    let pAddNewItem: (_ pTitle: String, _ pCals: Int32, _ pIcon: String) -> Void;
+    let pAddNewItem: (_ pTitle: String, _ pCals: Int32, _ pProtein: Int32, _ pIcon: String) -> Void;
     
     var body: some View
     {

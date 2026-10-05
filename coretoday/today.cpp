@@ -14,7 +14,7 @@ tToday
 DB::GetToday ()
 {
         tToday res;
-        const char * q = "SELECT date, deficit, consumed, active, updated_at FROM today WHERE date = ?;";
+        const char * q = "SELECT date, deficit, consumed, protein, active, updated_at FROM today WHERE date = ?;";
         sqlite3_stmt * st;
         char * date;
         
@@ -44,8 +44,9 @@ DB::GetToday ()
     res.uDate = date;
     res.uDeficit = sqlite3_column_int(st, 1);
     res.uConsumed = sqlite3_column_int(st, 2);
-    res.uActive = sqlite3_column_int(st, 3);
-    res.uUpdated  = sqlite3_column_int64(st, 4);
+    res.uProtein =  sqlite3_column_int(st, 3);
+    res.uActive = sqlite3_column_int(st, 4);
+    res.uUpdated  = sqlite3_column_int64(st, 5);
     
     sqlite3_finalize(st);
     delete [] date;
@@ -60,7 +61,7 @@ DB::GetTodayMeals ()
         sqlite3_stmt *                  st;
         char *                          date;
         const char *                    q = R"(
-            SELECT tm.id, m.title, m.cals, m.icon
+            SELECT tm.id, m.title, m.cals, m.protein, m.icon
             FROM today_meals tm
             JOIN meals m ON tm.meal_id = m.id
             WHERE tm.entry_date = ?
@@ -82,11 +83,12 @@ DB::GetTodayMeals ()
         tListItemContent meal;
         
         const unsigned char * name = sqlite3_column_text(st, 1);
-        const unsigned char * icon = sqlite3_column_text(st, 3);
+        const unsigned char * icon = sqlite3_column_text(st, 4);
         
         meal.uRecordId = sqlite3_column_int(st, 0);
         meal.uTitle = name ? (const char *)name: "";
         meal.uCals = sqlite3_column_int(st, 2);
+        meal.uProtein = sqlite3_column_int(st, 3);
         meal.uIcon = icon ? (const char *)icon : "";
         
         res.push_back (meal);
