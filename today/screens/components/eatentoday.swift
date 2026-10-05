@@ -20,7 +20,7 @@ struct EatenToday: View
     
     var body: some View
     {
-        ListWithTitle(contents: v.eatenToday, title: "Eaten today", pOnDelete: removeItem)
+        ListWithTitle(contents: v.eatenToday, title: "Eaten today", pOnDelete: removeItem, rightVal: TodayViewModel.shared.today.consumed, rightUnit: "kcal")
         {_ in
             // No tap action needed here
         }

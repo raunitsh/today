@@ -22,7 +22,7 @@ struct ExercisesInv: View
     
     var body: some View
     {
-        ListWithTitle (contents: activities, title: "\(activities.count) activities", pOnDelete: removeAct)
+        ListWithTitle (contents: activities, title: "\(activities.count) activities", pOnDelete: removeAct, rightVal: 0, rightUnit: "")
         {item in
 
             selected = item;

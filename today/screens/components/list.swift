@@ -12,15 +12,35 @@ struct ListWithTitle: View
     let contents: [ListItemContent];
     let title: String;
     let pOnDelete: (_ pItem: ListItemContent) -> Void;
+    let rightVal: Int32;
+    let rightUnit: String;
     let pOnItemTap: (_ pItem: ListItemContent) -> Void;
     
     var body: some View
     {
         VStack(alignment: .leading, spacing: 8)
         {
-            Text(title)
-                .font(.footnote)
-                .bold()
+            HStack
+            {
+                Text(title)
+                    .font(.footnote)
+                    .bold()
+                
+                Spacer()
+                
+                HStack
+                {
+                    Text("\(rightVal)")
+                        .font(.footnote)
+                        .contentTransition(.numericText())
+                        .animation(.snappy, value: rightVal)
+                    
+                    Text(rightUnit)
+                        .font(.footnote)
+                }
+                .opacity(rightVal > 0 ? 1 : 0)
+                .animation(.snappy, value: rightVal > 0)
+            }
             Divider ()
             
             ForEach (contents, id: \.compositeId)

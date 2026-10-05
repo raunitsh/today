@@ -57,7 +57,6 @@ struct CurrentStats: View
                     .contentTransition(.numericText())
                     .animation(.snappy, value: bmr)
                 
-                
                 Text ("Eaten")
                 Text ("\(v.today.consumed)")
                     .contentTransition(.numericText())

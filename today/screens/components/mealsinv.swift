@@ -22,7 +22,7 @@ struct MealsInv: View
     
     var body: some View
     {
-        ListWithTitle (contents: meals, title: "\(meals.count) meals", pOnDelete: removeItem)
+        ListWithTitle (contents: meals, title: "\(meals.count) meals", pOnDelete: removeItem, rightVal: 0, rightUnit: "")
         {item in
             
             selected = item;

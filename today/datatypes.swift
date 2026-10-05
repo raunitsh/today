@@ -21,6 +21,7 @@ struct ListItem: View
             HStack
             {
                 Image (systemName: pItem.icon)
+                    .frame(width: 28, alignment: .center)
                 
                 VStack (alignment: .leading)
                 {
@@ -28,9 +29,9 @@ struct ListItem: View
                     Text ("\(pItem.cals) kcal").font(.footnote)
                 }
                 
-                
                 Spacer()
             }
+            .contentShape(Rectangle())
             .onTapGesture
             {
                 pOnTap (pItem);

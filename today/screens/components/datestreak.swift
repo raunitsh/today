@@ -15,7 +15,7 @@ struct Streak: View
     {
         Button {
         } label: {
-            Label("\(v.streak) day streak", systemImage: "flame")
+            Label("\(v.streak)", systemImage: "flame")
                 .font(.footnote)
         }
         .buttonStyle(.bordered)
