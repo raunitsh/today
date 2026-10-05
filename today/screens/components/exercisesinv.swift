@@ -33,6 +33,7 @@ struct ExercisesInv: View
             Button ("Yes")
             {
                 if selected != nil {
+                    TodayViewModel.shared.activeTab = .TODAY;
                     TodayViewModel.shared.Workout (selected!);
                 }
             }

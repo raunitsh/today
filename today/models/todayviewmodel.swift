@@ -16,9 +16,16 @@ class TodayViewModel
     {
         Task
         {
-            today = await Backend.shared.GetToday ();
-            eatenToday = await Backend.shared.GetTodayMeals ();
-            actToday = await Backend.shared.GetTodayActivities ();
+            let t = await Backend.shared.GetToday ();
+            let m = await Backend.shared.GetTodayMeals ();
+            let a = await Backend.shared.GetTodayActivities ();
+            
+            withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+            {
+                self.today = t;
+                self.eatenToday = m;
+                self.actToday = a;
+            }
         }
     }
     
@@ -74,4 +81,5 @@ class TodayViewModel
     var today:      Today             = Today (date: "", deficit: 0, consumed: 0, updated: 0);
     var eatenToday: [ListItemContent] = [];
     var actToday:   [ListItemContent] = [];
+    var activeTab:  eTab              = .TODAY;
 }

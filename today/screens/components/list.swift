@@ -29,6 +29,10 @@ struct ListWithTitle: View
                 {item in
                     pOnItemTap (item);
                 }
+                .transition(.asymmetric(
+                    insertion: .opacity.combined(with: .move(edge: .top)),
+                    removal: .opacity.combined(with: .scale(scale: 0.95))
+                ))
                 
                 if item.compositeId != contents.last?.compositeId
                 {
@@ -36,6 +40,7 @@ struct ListWithTitle: View
                 }
             }
         }
+        .animation(.spring(response: 0.35, dampingFraction: 0.8), value: contents.map(\.compositeId))
         .padding(.top)
     }
     

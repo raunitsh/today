@@ -37,6 +37,7 @@ struct InvSwitchView: View
                 ExercisesInv (activities: $activities)
             }
         }
+        .animation(.easeInOut(duration: 0.25), value: pViewType)
         .debug()
     }
 }

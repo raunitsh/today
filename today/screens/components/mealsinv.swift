@@ -33,6 +33,7 @@ struct MealsInv: View
             Button ("Yes")
             {
                 if selected != nil {
+                    TodayViewModel.shared.activeTab = .TODAY;
                     TodayViewModel.shared.EatMeal (selected!);
                 }
             }

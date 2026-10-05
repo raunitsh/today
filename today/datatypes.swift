@@ -83,6 +83,13 @@ enum ViewType: String, CaseIterable, Identifiable
     var id: String {rawValue}
 }
 
+enum eTab: Hashable
+{
+    case TODAY;
+    case INVENTORY;
+    case PROGRESS;
+}
+
 struct UserProfile: Sendable
 {
     let name:   String;

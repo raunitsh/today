@@ -19,7 +19,7 @@ struct InvHeader: View
     {
         HStack
         {
-            Text ("Inventory").font(.title)
+            Text ("Inventory").font(.largeTitle).bold()
             Spacer()
             Button ("add", systemImage: "plus")
             {

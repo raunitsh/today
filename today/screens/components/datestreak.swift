@@ -15,7 +15,7 @@ struct Streak: View
     {
         Button {
         } label: {
-            Label("\(v.streak) day streak", systemImage: "tag.fill")
+            Label("\(v.streak) day streak", systemImage: "flame")
                 .font(.footnote)
         }
         .buttonStyle(.bordered)
@@ -26,7 +26,10 @@ struct Streak: View
 
 struct DateAndStreak: View
 {
-    var v = TodayViewModel.shared;
+    var date: String
+    {
+        formatDisplayDate (from: TodayViewModel.shared.today.date) ?? TodayViewModel.shared.today.date
+    }
     
     var body: some View
     {
@@ -34,10 +37,12 @@ struct DateAndStreak: View
         {
             VStack (alignment: .leading)
             {
-                Text (v.today.date)
-                    .font(.title3)
-                Text ("Daily Deficit")
-                    .font(.footnote)
+                Text (date)
+//                    .font(.title3)
+                    .fontDesign(.rounded)
+                    .bold()
+//                Text ("Daily Deficit")
+//                    .font(.footnote)
             }
             
             Spacer ()
@@ -45,5 +50,24 @@ struct DateAndStreak: View
             Streak ()
         }
         .frame(maxWidth: .infinity)
+    }
+    
+    func formatDisplayDate (from dateString: String) -> String?
+    {
+        let parseStrategy = Date.ISO8601FormatStyle()
+            .year().month().day()
+            .dateSeparator(.dash)
+        
+        guard let date = try? Date(dateString, strategy: parseStrategy) else {
+            return nil
+        }
+        
+        // Formats into: EEE d MMM (e.g., "Fri 2 Oct")
+        return date.formatted(
+            .dateTime
+                .weekday(.abbreviated)
+                .day()
+                .month(.abbreviated)
+        )
     }
 }

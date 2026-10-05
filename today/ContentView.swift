@@ -9,21 +9,27 @@ import SwiftUI
 
 struct ContentView: View
 {
+    @Bindable
+    var v = TodayViewModel.shared;
+    
     var body: some View
     {
-        TabView
+        TabView (selection: $v.activeTab)
         {
             NavigationStack
             { SummaryScreen () }.tabItem
-            { Label ("Today", systemImage: "house") }
+            { Label ("Today", systemImage: "flame") }
+                .tag(eTab.TODAY)
             
             NavigationStack
             { InventoryScreen () }.tabItem
-            { Label ("Inventory", systemImage: "house") }
+            { Label ("Inventory", systemImage: "square.grid.2x2") }
+                .tag(eTab.INVENTORY)
             
             NavigationStack
             { SummaryScreen () }.tabItem
-            { Label ("Progress", systemImage: "house") }
+            { Label ("Progress", systemImage: "chart.bar") }
+                .tag(eTab.PROGRESS)
         }
         .task
         {
