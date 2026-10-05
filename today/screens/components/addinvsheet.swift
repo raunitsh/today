@@ -9,8 +9,8 @@ import SwiftUI
 
 struct AddInvSheet: View
 {
-    let actIcons: [String] = ["figure.walk", "dumbbell", "figure.badminton"];
-    let mealIcons: [String] = ["frying.pan", "fork.knife", "takeoutbag.and.cup.and.straw", "cup.and.saucer.fill", "birthday.cake", "waterbottle"];
+    let actIcons: [String] = ["🚶", "💪", "🏸", "🏋"];
+    let mealIcons: [String] = ["🌯", "🍝", "🧆", "🥞", "🥘", "🧋", "🥪", "🍬", "🍫", "🧃", "🫓", "🍽️", "🍦"];
     
     @Environment(\.dismiss)
     private var dismiss;
@@ -38,19 +38,33 @@ struct AddInvSheet: View
         {
             VStack
             {
-                HStack
+                
+                ScrollView (.horizontal)
                 {
-                    ForEach (iconlist, id: \.self)
-                    {icon in
-                        
-                        Button ("meal", systemImage: icon)
-                        {
-                            selectedIcon = icon;
+                    HStack
+                    {
+                        ForEach (iconlist, id: \.self)
+                        {icon in
+                            
+                            Button
+                            {
+                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                    selectedIcon = icon
+                                }
+                            }
+                            label: {
+                                Text(icon)
+                                    .font(.system(size: 26))
+                                    .frame(width: 50, height: 50)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(selectedIcon == icon ? Color.blue : Color.clear, lineWidth: 2)
+                                    )
+                            }
+                            .buttonStyle(.plain)
                         }
-                        .labelStyle(.iconOnly)
-                        .buttonStyle(.glass)
-                        .tint(selectedIcon == icon ? .blue: nil)
                     }
+                    .padding(2)
                 }
                 .frame(maxWidth: .infinity)
                 .onAppear

@@ -28,7 +28,8 @@ struct DateAndStreak: View
 {
     var date: String
     {
-        formatDisplayDate (from: TodayViewModel.shared.today.date) ?? TodayViewModel.shared.today.date
+        TodayViewModel.shared.today.date.isEmpty ? "Start Logging !" :
+        formatDisplayDate (from: TodayViewModel.shared.today.date)!
     }
     
     var body: some View
@@ -38,11 +39,8 @@ struct DateAndStreak: View
             VStack (alignment: .leading)
             {
                 Text (date)
-//                    .font(.title3)
                     .fontDesign(.rounded)
                     .bold()
-//                Text ("Daily Deficit")
-//                    .font(.footnote)
             }
             
             Spacer ()

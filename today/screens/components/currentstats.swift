@@ -32,44 +32,57 @@ struct CurrentStats: View
     
     var body: some View
     {
-        VStack (alignment: .leading)
+        VStack
         {
-            HStack (alignment: .bottom)
-            {
-                Text ("\(v.today.deficit)")
-                    .font(.system(size: 52, weight: .bold, design: .rounded))
-                    .bold()
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: v.today.deficit)
-                
-                Text ("kcal")
-                    .font(.footnote)
-                
-                Spacer ()
-            }
-            .frame(maxWidth: .infinity)
-            
-            
             HStack
             {
-                Text ("BMR")
-                Text ("\(bmr)")
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: bmr)
+                VStack (alignment: .leading)
+                {
+                    HStack (alignment: .bottom)
+                    {
+                        Text ("\(v.today.deficit)")
+                            .font(.system(size: 52, weight: .bold, design: .rounded))
+                            .bold()
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: v.today.deficit)
+                        
+                        Text ("kcal")
+                            .font(.footnote)
+                    }
+                    Text ("Daily deficit")
+                        .font(.footnote)
+                }
                 
-                Text ("Eaten")
-                Text ("\(v.today.consumed)")
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: v.today.consumed)
+                Spacer ()
                 
-                Text ("Active")
-                Text ("\(v.today.active) kcal")
-                    .contentTransition(.numericText())
-                    .animation(.snappy, value: v.today.consumed)
+                VStack (alignment: .trailing)
+                {
+                    HStack
+                    {
+                        Text ("BMR")
+                        Text ("\(bmr)")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: bmr)
+                    }
+                    
+                    HStack
+                    {
+                        Text ("Eaten")
+                        Text ("\(v.today.consumed)")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: v.today.consumed)
+                    }
+                    
+                    HStack
+                    {
+                        Text ("Active")
+                        Text ("\(v.today.active) kcal")
+                            .contentTransition(.numericText())
+                            .animation(.snappy, value: v.today.consumed)
+                    }
+                }
+                .font(.caption)
             }
-            .font(.caption)
-            
-            
             VisualProgress ()
         }
         .frame(maxWidth: .infinity)

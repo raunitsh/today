@@ -20,8 +20,10 @@ struct ListItem: View
         {
             HStack
             {
-                Image (systemName: pItem.icon)
-                    .frame(width: 28, alignment: .center)
+//                Image (systemName: pItem.icon)
+//                    .frame(width: 28, alignment: .center)
+                Text (pItem.icon)
+                    .font(.title)
                 
                 VStack (alignment: .leading)
                 {
