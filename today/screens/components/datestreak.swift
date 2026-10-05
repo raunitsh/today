@@ -13,14 +13,15 @@ struct Streak: View
     
     var body: some View
     {
-        Button {
+        Button
+        {
         } label: {
-            Label("\(v.streak)", systemImage: "flame")
+            Text("🔥 \(v.streak)")
                 .font(.footnote)
         }
+        .foregroundStyle(.black)
         .buttonStyle(.bordered)
-        .buttonBorderShape(.capsule)          
-        .tint(.blue)
+        .buttonBorderShape(.capsule)
     }
 }
 

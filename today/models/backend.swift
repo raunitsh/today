@@ -11,6 +11,24 @@ actor Backend
 {
     static let shared = Backend ();
     
+    public func GetTotalDeficit (_ pDays: Int32) -> Int32
+    {
+        return -vDb.GetTotalDeficit (pDays);
+    }
+    
+    public func GetDeficits (_ pDays: Int32) -> [Int32]
+    {
+        let res = vDb.GetDeficits (pDays);
+        var defs: [Int32] = [];
+        
+        for d in res
+        {
+            defs.append(-d);
+        }
+        
+        return defs;
+    }
+    
     public func GetTodayMeals () -> [ListItemContent]
     {
         let res = vDb.GetTodayMeals ();

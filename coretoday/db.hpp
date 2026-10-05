@@ -41,6 +41,9 @@ public:
     bool                            DelTodayMeal        (const int pId);
     bool                            DelTodayEx          (const int pId);
     
+    int                             GetTotalDeficit     (const int& pDays);
+    std::vector<int>                GetDeficits         (const int& pDays);
+    
 private:
     
     bool                            InternalMapMeal     (const char * pDate, const char * pMealId);

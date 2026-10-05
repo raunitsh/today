@@ -52,6 +52,7 @@ struct ContentView: View
                 UserViewModel.shared.Init ();
                 TodayViewModel.shared.Init ();
                 InventoryViewModel.shared.Init ();
+                ProgressViewModel.shared.Init ();
             }
         }
     }

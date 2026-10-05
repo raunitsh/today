@@ -28,6 +28,8 @@ struct ProgressScreen: View
                     }
                 }
                 .pickerStyle(.segmented)
+                
+                DeficitHistory ();
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .padding(.all)

@@ -16,6 +16,9 @@ struct ExercisesInv: View
     var showAlert: Bool = false;
     
     @State
+    var deleteAlert: Bool = false;
+    
+    @State
     var selected: ListItemContent?;
     
     let title = InventoryViewModel.shared.viewType == .meals ? "meal" : "workout";
@@ -40,10 +43,23 @@ struct ExercisesInv: View
             
             Button ("Cancel", role: .close) {}
         }
+        .alert("Delete \(title)?", isPresented: $deleteAlert)
+        {
+            Button ("Delete")
+            {
+                if selected != nil {
+                    deleteAlert = false;
+                    InventoryViewModel.shared.delItem (selected!.id);
+                }
+            }
+            
+            Button ("Cancel", role: .close) {}
+        }
     }
     
     private func removeAct (_ pItem: ListItemContent) -> Void
     {
-        InventoryViewModel.shared.delItem (pItem.id);
+        selected = pItem;
+        deleteAlert = true;
     }
 }

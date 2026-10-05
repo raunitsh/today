@@ -7,13 +7,28 @@
 
 import SwiftUI
 
+struct DaynDeficit: Sendable, Identifiable
+{
+    let id = UUID ();
+    let day: String;
+    let deficit: Int32;
+    
+    nonisolated init(day: String, deficit: Int32)
+    {
+        self.day = day
+        self.deficit = deficit
+    }
+}
+
 struct Progress: Sendable
 {
-    let totalDeficit: Int32;
+    var totalDeficit: Int32;
+    var deficitHistory: [DaynDeficit];
     
     nonisolated init(totalDeficit: Int32)
     {
         self.totalDeficit = totalDeficit
+        self.deficitHistory = [];
     }
 }
 
