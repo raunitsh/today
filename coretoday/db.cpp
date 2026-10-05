@@ -28,12 +28,14 @@ DB::Open (const std::string &pPath)
                 id      TEXT    PRIMARY KEY NOT NULL,
                 title   TEXT                NOT NULL,
                 cals    INTEGER             NOT NULL,
+                icon    TEXT                NOT NULL,
                 del     INTEGER             NOT NULL DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS activities (
                 id      TEXT    PRIMARY KEY NOT NULL,
                 title   TEXT                NOT NULL,
                 cals    INTEGER             NOT NULL,
+                icon    TEXT                NOT NULL,
                 del     INTEGER             NOT NULL DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS profile (
@@ -48,6 +50,7 @@ DB::Open (const std::string &pPath)
             CREATE TABLE IF NOT EXISTS  today (
                 date        TEXT    PRIMARY KEY,
                 consumed    INTEGER NOT NULL    DEFAULT 0,
+                active      INTEGER NOT NULL    DEFAULT 0,
                 deficit     INTEGER NOT NULL    DEFAULT 0,
                 created_at  INTEGER NOT NULL,
                 updated_at  INTEGER NOT NULL
@@ -56,6 +59,7 @@ DB::Open (const std::string &pPath)
                 id          INTEGER PRIMARY KEY AUTOINCREMENT,
                 entry_date  TEXT    NOT NULL,
                 meal_id     TEXT    NOT NULL,
+                created_at  INTEGER NOT NULL,
                 
                 FOREIGN KEY (entry_date) REFERENCES today(date) ON DELETE CASCADE,
                 FOREIGN KEY (meal_id)   REFERENCES  meals(id)   ON DELETE RESTRICT
@@ -64,6 +68,7 @@ DB::Open (const std::string &pPath)
                 id          INTEGER PRIMARY KEY AUTOINCREMENT,
                 entry_date  TEXT    NOT NULL,
                 act_id      TEXT    NOT NULL,
+                created_at  INTEGER NOT NULL,
                 
                 FOREIGN KEY (entry_date) REFERENCES today(date)     ON DELETE CASCADE,
                 FOREIGN KEY (act_id)   REFERENCES  activities(id)   ON DELETE RESTRICT

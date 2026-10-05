@@ -9,6 +9,9 @@ import SwiftUI
 
 struct AddInvSheet: View
 {
+    let actIcons: [String] = ["figure.walk", "dumbbell", "figure.badminton"];
+    let mealIcons: [String] = ["frying.pan", "fork.knife", "takeoutbag.and.cup.and.straw", "cup.and.saucer.fill", "birthday.cake", "waterbottle"];
+    
     @Environment(\.dismiss)
     private var dismiss;
     
@@ -18,8 +21,16 @@ struct AddInvSheet: View
     @State
     private var cals: Int32 = 500;
     
+    private var iconlist: [String]
+    {
+        pViewType == .meals ? mealIcons : actIcons
+    }
+    
+    @State
+    private var selectedIcon: String = "";
+    
     let pViewType: ViewType;
-    let pSubmit: (_ pTitle: String, _ pCals: Int32) -> Void;
+    let pSubmit: (_ pTitle: String, _ pCals: Int32, _ pIcon: String) -> Void;
     
     var body: some View
     {
@@ -27,6 +38,26 @@ struct AddInvSheet: View
         {
             VStack
             {
+                HStack
+                {
+                    ForEach (iconlist, id: \.self)
+                    {icon in
+                        
+                        Button ("meal", systemImage: icon)
+                        {
+                            selectedIcon = icon;
+                        }
+                        .labelStyle(.iconOnly)
+                        .buttonStyle(.glass)
+                        .tint(selectedIcon == icon ? .blue: nil)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .onAppear
+                {
+                    selectedIcon = iconlist.first!
+                }
+                
                 TextField ("Name", text: $title)
                     .textFieldStyle(.roundedBorder)
                 
@@ -49,7 +80,7 @@ struct AddInvSheet: View
                 ToolbarItem (placement: .confirmationAction) {
                     Button ("Done")
                     {
-                        pSubmit (title, cals);
+                        pSubmit (title, cals, selectedIcon);
                         dismiss ()
                     }
                     .tint(.blue)

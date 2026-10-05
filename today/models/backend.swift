@@ -21,7 +21,8 @@ actor Backend
             meals.append(ListItemContent(
                 recordId: item.uRecordId,
                 title: String (item.uTitle),
-                cals: item.uCals
+                cals: item.uCals,
+                icon: String (item.uIcon)
             ));
         }
         
@@ -38,7 +39,8 @@ actor Backend
             act.append(ListItemContent(
                 recordId: item.uRecordId,
                 title: String (item.uTitle),
-                cals: item.uCals
+                cals: item.uCals,
+                icon: String (item.uIcon)
             ));
         }
         
@@ -49,7 +51,7 @@ actor Backend
     {
         let res: tToday =  vDb.GetToday ();
         
-        return Today(date: String (res.uDate), deficit: res.uDeficit, consumed: res.uConsumed, updated: res.uUpdated);
+        return Today(date: String (res.uDate), deficit: res.uDeficit, consumed: res.uConsumed, active: res.uActive, updated: res.uUpdated);
     }
     
     public func LogMeal (_ pMealId: UUID) -> Bool
@@ -104,8 +106,9 @@ actor Backend
         let title = std.string (pMeal.title);
         let cals = pMeal.cals;
         let id = std.string (pMeal.id.uuidString);
+        let icon = std.string (pMeal.icon);
         
-        return vDb.AddMealInv(id, title, cals);
+        return vDb.AddMealInv(id, title, cals, icon);
     }
     
     public func AddActInv (_ pMeal: ListItemContent) -> Bool
@@ -113,8 +116,9 @@ actor Backend
         let title = std.string (pMeal.title);
         let cals = pMeal.cals;
         let id = std.string (pMeal.id.uuidString);
+        let icon = std.string (pMeal.icon);
         
-        return vDb.AddExInv (id, title, cals);
+        return vDb.AddExInv (id, title, cals, icon);
     }
     
     public func GetMealsInv () -> [ListItemContent]
@@ -127,8 +131,9 @@ actor Backend
             let title = String (meal.uTitle);
             let id = UUID(uuidString: String (meal.uId)) ?? UUID ();
             let cals = meal.uCals;
+            let icon = String (meal.uIcon);
             
-            meals.append (ListItemContent (id: id, title: title, cals: cals))
+            meals.append (ListItemContent (id: id, title: title, cals: cals, icon: icon))
         }
         
         return meals;
@@ -141,7 +146,8 @@ actor Backend
             ListItemContent(
                 id: UUID(uuidString: String(act.uId)) ?? UUID(),
                 title: String(act.uTitle),
-                cals: act.uCals
+                cals: act.uCals,
+                icon: String (act.uIcon)
             )
         }
     }

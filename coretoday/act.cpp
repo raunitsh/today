@@ -9,7 +9,7 @@
 #include "utils.hpp"
 
 bool
-DB::AddExInv(const std::string &pId, const std::string &pTitle, const int &pCals)
+DB::AddExInv(const std::string &pId, const std::string &pTitle, const int &pCals, const std::string& pIcon)
 {
         const char *    q = nullptr;
         sqlite3_stmt*   st = nullptr;
@@ -20,7 +20,7 @@ DB::AddExInv(const std::string &pId, const std::string &pTitle, const int &pCals
         return false;
     }
     
-    q = "INSERT OR REPLACE INTO activities (id, title, cals) VALUES (?, ?, ?);";
+    q = "INSERT OR REPLACE INTO activities (id, title, cals, icon) VALUES (?, ?, ?, ?);";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
     {
@@ -30,6 +30,7 @@ DB::AddExInv(const std::string &pId, const std::string &pTitle, const int &pCals
     sqlite3_bind_text (st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text (st, 2, pTitle.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int (st, 3, pCals);
+    sqlite3_bind_text(st, 4, pIcon.c_str (), -1, SQLITE_TRANSIENT);
     
     rc = (sqlite3_step (st) == SQLITE_DONE);
     return rc;
@@ -47,7 +48,7 @@ DB::GetExInv ()
         return res;
     }
     
-    sql = "SELECT id, title, cals FROM activities WHERE del = 0;";
+    sql = "SELECT id, title, cals, icon FROM activities WHERE del = 0;";
     
     if (sqlite3_prepare_v2(vDb, sql, -1, &st, nullptr) == SQLITE_OK)
     {
@@ -58,10 +59,12 @@ DB::GetExInv ()
             const unsigned char * id = sqlite3_column_text(st, 0);
             const unsigned char * title = sqlite3_column_text(st, 1);
             int cals = sqlite3_column_int(st, 2);
+            const unsigned char * icon = sqlite3_column_text(st, 3);
             
             act.uId = id ? (const char *)id : "";
             act.uTitle = title ? (const char *)title : "";
             act.uCals = cals;
+            act.uIcon = icon ? (const char *)icon : "";
             
             res.push_back (act);
         }
@@ -119,6 +122,7 @@ DB::LogEx(const std::string &pActId)
         int64_t created = 0;
         int64_t updated = 0;
         int deficit = 0;
+        int active = 0;
         int rc;
         sqlite3_stmt * st_act;
         sqlite3_stmt * st_bmr;
@@ -173,7 +177,7 @@ DB::LogEx(const std::string &pActId)
     curr_date = new char [11];
     GetTodayDate (curr_date);
     
-    q = "SELECT deficit FROM today where date = ?;";
+    q = "SELECT deficit, active FROM today where date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_today, nullptr) != SQLITE_OK)
     {
@@ -189,13 +193,15 @@ DB::LogEx(const std::string &pActId)
     {
         // Record exists
         deficit = sqlite3_column_int(st_today, 0);
+        active = sqlite3_column_int(st_today, 1);
         
         sqlite3_finalize(st_today);
         
         // deficit should INCREASE
         deficit -= act_cals;
+        active += act_cals;
 
-        q = "UPDATE today SET deficit = ?, updated_at = ? WHERE date = ?;";
+        q = "UPDATE today SET deficit = ?, updated_at = ?, active = ? WHERE date = ?;";
         
         if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
         {
@@ -207,7 +213,8 @@ DB::LogEx(const std::string &pActId)
 
         sqlite3_bind_int(st_new, 1, deficit);
         sqlite3_bind_int64(st_new, 2, updated);
-        sqlite3_bind_text(st_new, 3, curr_date, -1, SQLITE_TRANSIENT);
+        sqlite3_bind_int(st_new, 3, active);
+        sqlite3_bind_text(st_new, 4, curr_date, -1, SQLITE_TRANSIENT);
         
         rc = (sqlite3_step(st_new) == SQLITE_DONE);
         
@@ -215,7 +222,7 @@ DB::LogEx(const std::string &pActId)
         
         if (rc)
         {
-            rc = InternalMapEx (curr_date, pActId.c_str());
+            rc = InternalMapEx (curr_date, pActId.c_str ());
         }
         
         delete[] curr_date;
@@ -226,7 +233,7 @@ DB::LogEx(const std::string &pActId)
         // No existing record for today
         sqlite3_finalize(st_today);
         
-        q = "INSERT INTO today (date, deficit, created_at, updated_at) VALUES (?, ?, ?, ?);";
+        q = "INSERT INTO today (date, deficit, active, created_at, updated_at) VALUES (?, ?, ?, ?, ?);";
         
         if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
         {
@@ -235,13 +242,15 @@ DB::LogEx(const std::string &pActId)
         }
         
         deficit = act_cals;
+        active += act_cals;
         created = GetNow();
         updated = GetNow();
         
         sqlite3_bind_text(st_new, 1, curr_date, -1, SQLITE_TRANSIENT);
         sqlite3_bind_int(st_new, 2, deficit);
-        sqlite3_bind_int64(st_new, 3, created);
-        sqlite3_bind_int64(st_new, 4, updated);
+        sqlite3_bind_int(st_new, 3, active);
+        sqlite3_bind_int64(st_new, 4, created);
+        sqlite3_bind_int64(st_new, 5, updated);
         
         rc = (sqlite3_step(st_new) == SQLITE_DONE);
         sqlite3_finalize(st_new);
@@ -268,6 +277,7 @@ DB::UnLogEx (const int pRecordId)
         char * curr_date;
         int64_t updated = 0;
         int deficit = 0;
+        int active = 0;
         int rc;
         sqlite3_stmt * st_rec;
         sqlite3_stmt * st_today;
@@ -309,7 +319,7 @@ DB::UnLogEx (const int pRecordId)
     curr_date = new char [11];
     GetTodayDate (curr_date);
     
-    q = "SELECT deficit FROM today where date = ?;";
+    q = "SELECT deficit, active FROM today where date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_today, nullptr) != SQLITE_OK)
     {
@@ -331,12 +341,14 @@ DB::UnLogEx (const int pRecordId)
     
     // Record exists
     deficit = sqlite3_column_int(st_today, 0);
+    active = sqlite3_column_int(st_today, 1);
     
     sqlite3_finalize(st_today);
     
     deficit += act_cals;
+    active -= act_cals;
 
-    q = "UPDATE today SET deficit = ?, updated_at = ? WHERE date = ?;";
+    q = "UPDATE today SET deficit = ?, active = ?, updated_at = ? WHERE date = ?;";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st_new, nullptr) != SQLITE_OK)
     {
@@ -347,8 +359,9 @@ DB::UnLogEx (const int pRecordId)
     updated = GetNow ();
 
     sqlite3_bind_int(st_new, 1, deficit);
-    sqlite3_bind_int64(st_new, 2, updated);
-    sqlite3_bind_text(st_new, 3, curr_date, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(st_new, 2, active);
+    sqlite3_bind_int64(st_new, 3, updated);
+    sqlite3_bind_text(st_new, 4, curr_date, -1, SQLITE_TRANSIENT);
     
     rc = (sqlite3_step(st_new) == SQLITE_DONE);
     
@@ -390,17 +403,21 @@ DB::InternalUnmapEx (const int pId)
 bool
 DB::InternalMapEx (const char *pDate, const char *pActId)
 {
-        const char * q = "INSERT INTO today_act (entry_date, act_id) VALUES (?, ?);";
+        const char * q = "INSERT INTO today_act (entry_date, act_id, created_at) VALUES (?, ?, ?);";
         sqlite3_stmt* st;
         bool rc;
+        int64_t now;
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
     {
         return false;
     }
     
+    now = GetNow ();
+    
     sqlite3_bind_text(st, 1, pDate, -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(st, 2, pActId, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int64(st, 3, now);
     
     rc = (sqlite3_step(st) == SQLITE_DONE);
     

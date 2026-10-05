@@ -51,7 +51,7 @@ DB::GetMealsInv ()
         return res;
     }
     
-    sql = "SELECT id, title, cals FROM meals WHERE del = 0;";
+    sql = "SELECT id, title, cals, icon FROM meals WHERE del = 0;";
     
     if (sqlite3_prepare_v2(vDb, sql, -1, &st, nullptr) == SQLITE_OK)
     {
@@ -62,10 +62,12 @@ DB::GetMealsInv ()
             const unsigned char * id = sqlite3_column_text(st, 0);
             const unsigned char * title = sqlite3_column_text(st, 1);
             int cals = sqlite3_column_int(st, 2);
+            const unsigned char * icon = sqlite3_column_text(st, 3);
             
             meal.uId = id ? (const char *)id : "";
             meal.uTitle = title ? (const char *)title : "";
             meal.uCals = cals;
+            meal.uIcon = icon ? (const char *)icon: "";
             
             res.push_back (meal);
         }
@@ -76,7 +78,7 @@ DB::GetMealsInv ()
 }
 
 bool
-DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCals)
+DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCals, const std::string& pIcon)
 {
         const char *    q = nullptr;
         sqlite3_stmt*   st = nullptr;
@@ -87,7 +89,7 @@ DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCa
         return false;
     }
     
-    q = "INSERT OR REPLACE INTO meals (id, title, cals) VALUES (?, ?, ?);";
+    q = "INSERT OR REPLACE INTO meals (id, title, cals, icon) VALUES (?, ?, ?, ?);";
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
     {
@@ -97,6 +99,7 @@ DB::AddMealInv(const std::string &pId, const std::string &pTitle, const int &pCa
     sqlite3_bind_text (st, 1, pId.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text (st, 2, pTitle.c_str (), -1, SQLITE_TRANSIENT);
     sqlite3_bind_int (st, 3, pCals);
+    sqlite3_bind_text(st, 4, pIcon.c_str (), -1, SQLITE_TRANSIENT);
     
     rc = (sqlite3_step (st) == SQLITE_DONE);
     sqlite3_finalize(st);
@@ -380,17 +383,21 @@ DB::UnLogMeal (const int pRecordId)
 bool
 DB::InternalMapMeal(const char *pDate, const char *pMealId)
 {
-        const char * q = "INSERT INTO today_meals (entry_date, meal_id) VALUES (?, ?);";
+        const char * q = "INSERT INTO today_meals (entry_date, meal_id, created_at) VALUES (?, ?, ?);";
         sqlite3_stmt* st;
         bool rc;
+        int64_t now;
     
     if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
     {
         return false;
     }
     
+    now = GetNow ();
+    
     sqlite3_bind_text(st, 1, pDate, -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(st, 2, pMealId, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int64(st, 3, now);
     
     rc = (sqlite3_step(st) == SQLITE_DONE);
     

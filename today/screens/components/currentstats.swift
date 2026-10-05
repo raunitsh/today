@@ -48,12 +48,11 @@ struct CurrentStats: View
                 Spacer ()
             }
             .frame(maxWidth: .infinity)
-            .debug()
+            
             
             HStack
             {
                 Text ("BMR")
-
                 Text ("\(bmr)")
                     .contentTransition(.numericText())
                     .animation(.snappy, value: bmr)
@@ -63,13 +62,17 @@ struct CurrentStats: View
                 Text ("\(v.today.consumed)")
                     .contentTransition(.numericText())
                     .animation(.snappy, value: v.today.consumed)
+                
+                Text ("Active")
+                Text ("\(v.today.active) kcal")
+                    .contentTransition(.numericText())
+                    .animation(.snappy, value: v.today.consumed)
             }
             .font(.caption)
-            .debug()
+            
             
             VisualProgress ()
         }
         .frame(maxWidth: .infinity)
-        .debug ()
     }
 }

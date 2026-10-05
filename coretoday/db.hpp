@@ -24,13 +24,13 @@ public:
     std::vector<tListItemContent>   GetMealsInv         ();
     bool                            LogMeal             (const std::string& pMealId);
     bool                            UnLogMeal           (const int pRecordId);
-    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals, const std::string& pIcon);
     bool                            DelMealInv          (const std::string& pId);
     
     std::vector<tListItemContent>   GetExInv            ();
     bool                            LogEx               (const std::string& pActId);
     bool                            UnLogEx             (const int pRecordId);
-    bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals);
+    bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals, const std::string& pIcon);
     bool                            DelExInv            (const std::string& pId);
     
     tProfile                        GetProf             ();

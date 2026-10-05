@@ -12,7 +12,7 @@ struct BorderModifier: ViewModifier
     func body (content: Content) -> some View
     {
         content
-//            .border(.blue)
+            .border(.blue)
     }
 }
 

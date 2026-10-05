@@ -78,7 +78,7 @@ class TodayViewModel
     }
     
     var streak:     Int               = 12;
-    var today:      Today             = Today (date: "", deficit: 0, consumed: 0, updated: 0);
+    var today:      Today             = Today (date: "", deficit: 0, consumed: 0, active: 0, updated: 0);
     var eatenToday: [ListItemContent] = [];
     var actToday:   [ListItemContent] = [];
     var activeTab:  eTab              = .TODAY;

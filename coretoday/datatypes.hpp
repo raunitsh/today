@@ -13,6 +13,7 @@ struct tListItemContent
     int         uRecordId = 0;
     std::string uId;
     std::string uTitle;
+    std::string uIcon;
 };
 
 struct tProfile
@@ -30,5 +31,6 @@ struct tToday
     std::string uDate;
     int         uDeficit;
     int         uConsumed;
+    int         uActive;
     int64_t     uUpdated;
 };

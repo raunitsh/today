@@ -13,7 +13,7 @@ struct InvHeader: View
     var showSheet: Bool = false;
     var pViewType: ViewType;
     
-    let pAddNewItem: (_ pTitle: String, _ pCals: Int32) -> Void;
+    let pAddNewItem: (_ pTitle: String, _ pCals: Int32, _ pIcon: String) -> Void;
     
     var body: some View
     {
@@ -33,7 +33,7 @@ struct InvHeader: View
             }
         }
         .frame(maxWidth: .infinity)
-        .debug()
+        
     }
     
     private func onDismiss () -> Void
@@ -53,7 +53,7 @@ struct InventoryScreen: View
         {
             VStack (alignment: .leading)
             {
-                InvHeader (pViewType: vm.viewType, pAddNewItem: vm.addItem(_:_:))
+                InvHeader (pViewType: vm.viewType, pAddNewItem: vm.addItem)
                 InvSwitchView (pViewType: $vm.viewType, meals: $vm.meals, activities: $vm.activities)
             }
             
