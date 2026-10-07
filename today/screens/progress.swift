@@ -12,6 +12,9 @@ struct ProgressScreen: View
     @Bindable
     var v = ProgressViewModel.shared;
     
+    @Binding
+    var currTab: eTab;
+    
     var body: some View
     {
         NavigationStack
@@ -29,11 +32,20 @@ struct ProgressScreen: View
                     }
                     .pickerStyle(.segmented)
                     
-                    DeficitHistory ();
+                    BarGraph (pData: v.progress.deficitHistory, pTitle: "Weekly Deficits", pYAxis: "Deficits");
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.all)
             }
-        }.navigationTitle("Progress")
+            .onChange(of: currTab)
+            {_, newtab in
+                
+                if newtab == currTab
+                {
+                    Task { ProgressViewModel.shared.Sync () }
+                }
+            }
+        }
+        .navigationTitle("Progress")
     }
 }

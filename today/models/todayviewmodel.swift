@@ -12,7 +12,7 @@ class TodayViewModel
 {
     static let shared = TodayViewModel ();
     
-    func Init () -> Void
+    func Sync () -> Void
     {
         Task
         {

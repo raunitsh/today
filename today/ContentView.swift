@@ -27,7 +27,7 @@ struct ContentView: View
                 .tag(eTab.INVENTORY)
             
             NavigationStack
-            { ProgressScreen () }.tabItem
+            { ProgressScreen (currTab: $v.activeTab) }.tabItem
             { Label ("Progress", systemImage: "chart.bar") }
                 .tag(eTab.PROGRESS)
         }
@@ -44,15 +44,15 @@ struct ContentView: View
         {
             Task
             {
-                if await !Backend.shared.Init (docsUrl)
+                if await !Backend.shared.Sync (docsUrl)
                 {
                     print ("Backend init failed");
                 }
                 
-                UserViewModel.shared.Init ();
-                TodayViewModel.shared.Init ();
-                InventoryViewModel.shared.Init ();
-                ProgressViewModel.shared.Init ();
+                UserViewModel.shared.Sync ();
+                TodayViewModel.shared.Sync ();
+                InventoryViewModel.shared.Sync ();
+                ProgressViewModel.shared.Sync ();
             }
         }
     }

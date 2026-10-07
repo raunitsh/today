@@ -11,7 +11,7 @@ struct InventoryScreen: View
 {
     @Bindable
     var vm = InventoryViewModel.shared;
-    
+
     @State
     var showSheet: Bool = false;
     

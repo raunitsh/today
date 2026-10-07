@@ -22,7 +22,7 @@ struct SummaryScreen: View
             ScrollView
             {
                 VStack (alignment: .leading)
-                {   
+                {
                     CurrentStats ();
                     EatenToday ();
                     ActivityToday ();

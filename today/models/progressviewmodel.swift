@@ -12,7 +12,7 @@ class ProgressViewModel
 {
     static let shared =  ProgressViewModel ();
     
-    public func Init () -> Void
+    public func Sync () -> Void
     {
         Task
         {
@@ -33,9 +33,9 @@ class ProgressViewModel
                 
                 if let date = calendar.date (byAdding: .day, value: dayOffset, to: today)
                 {
-                    progress.deficitHistory.append (DaynDeficit (
+                    progress.deficitHistory.append (DayMetric (
                         day: formatter.string(from: date),
-                        deficit: defs [i]
+                        metric: defs [i]
                     ))
                 }
             }

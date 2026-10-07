@@ -114,7 +114,7 @@ actor Backend
         );
     }
     
-    public func Init (_ pDocUrl: URL) -> Bool
+    public func Sync (_ pDocUrl: URL) -> Bool
     {
         let dbUrl = pDocUrl.appendingPathComponent ("today_db.sqlite");
         let path = std.string (dbUrl.path);

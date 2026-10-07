@@ -12,7 +12,7 @@ class UserViewModel
 {
     static let shared = UserViewModel ();
     
-    public func Init () -> Void
+    public func Sync () -> Void
     {
         Task
         {

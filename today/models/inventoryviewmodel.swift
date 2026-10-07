@@ -13,17 +13,13 @@ class InventoryViewModel
     static let shared = InventoryViewModel ();
     
     @MainActor
-    func Init () -> Void
+    func Sync () -> Void
     {
-        loading = true;
-        
         Task
         {
             meals = await Backend.shared.GetMealsInv ();
             activities = await Backend.shared.GetActInv ();
         }
-        
-        loading = false;
     }
     
     func addItem (_ pTitle: String, _ pCals: Int32, _ pProtein: Int32, _ pIcon: String) -> Void
@@ -77,5 +73,4 @@ class InventoryViewModel
     var viewType:   ViewType            = .meals;
     var meals:      [ListItemContent]   = [];
     var activities: [ListItemContent]   = [];
-    var loading:    Bool                = false;
 }
