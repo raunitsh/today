@@ -7,58 +7,51 @@
 
 import SwiftUI
 
-struct InvHeader: View
-{
-    @State
-    var showSheet: Bool = false;
-    var pViewType: ViewType;
-    
-    let pAddNewItem: (_ pTitle: String, _ pCals: Int32, _ pProtein: Int32, _ pIcon: String) -> Void;
-    
-    var body: some View
-    {
-        HStack
-        {
-            Text ("Inventory").font(.largeTitle).bold()
-            Spacer()
-            Button ("add", systemImage: "plus")
-            {
-                showSheet = true;
-            }
-            .labelStyle(.iconOnly)
-            .sheet (isPresented: $showSheet, onDismiss: onDismiss) {
-                AddInvSheet (pViewType: pViewType, pSubmit: pAddNewItem)
-                    .presentationDetents([.fraction(0.25), .medium])
-                    .presentationDragIndicator(.visible)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        
-    }
-    
-    private func onDismiss () -> Void
-    {
-        showSheet = false;
-    }
-}
-
 struct InventoryScreen: View
 {
     @Bindable
     var vm = InventoryViewModel.shared;
     
+    @State
+    var showSheet: Bool = false;
+    
     var body: some View
     {
-        ScrollView
+        NavigationStack
         {
-            VStack (alignment: .leading)
+            ScrollView
             {
-                InvHeader (pViewType: vm.viewType, pAddNewItem: vm.addItem)
-                InvSwitchView (pViewType: $vm.viewType, meals: $vm.meals, activities: $vm.activities)
+                VStack (alignment: .leading)
+                {
+                    InvSwitchView (pViewType: $vm.viewType, meals: $vm.meals, activities: $vm.activities)
+                }
+                
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.all)
             }
-            
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.all)
         }
+        .navigationTitle("Inventory")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing)
+            {
+                Button ("add", systemImage: "plus")
+                {
+                    showSheet = true;
+                }
+                .labelStyle(.iconOnly)
+                .tint(.blue)
+                .sheet (isPresented: $showSheet, onDismiss: onDismiss)
+                {
+                    AddInvSheet (pViewType: vm.viewType, pSubmit: vm.addItem)
+                        .presentationDetents([.fraction(0.25), .medium])
+                        .presentationDragIndicator(.visible)
+                }
+            }
+        }
+    }
+    
+    private func onDismiss () -> Void
+    {
+        showSheet = false;
     }
 }

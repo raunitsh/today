@@ -39,6 +39,12 @@ DB::DelMealInv (const std::string &pId)
     return rc;
 }
 
+const std::vector<tListItemContent>&
+DB::GetMealsInvCpp () const
+{
+    return uMeals;
+}
+
 std::vector<tListItemContent>
 DB::GetMealsInv ()
 {
@@ -71,6 +77,7 @@ DB::GetMealsInv ()
             meal.uIcon = icon ? (const char *)icon: "";
             
             res.push_back (meal);
+            uMeals.push_back (meal);
         }
         sqlite3_finalize(st);
     }

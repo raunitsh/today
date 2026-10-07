@@ -38,7 +38,11 @@ struct CurrentStats: View
             {
                 VStack (alignment: .leading)
                 {
-                    HStack (alignment: .bottom)
+                    Text ("Daily deficit")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    
+                    HStack (alignment: .firstTextBaseline, spacing: 4)
                     {
                         Text ("\(v.today.deficit)")
                             .font(.system(size: 52, weight: .bold, design: .rounded))
@@ -47,10 +51,8 @@ struct CurrentStats: View
                             .animation(.snappy, value: v.today.deficit)
                         
                         Text ("kcal")
-                            .font(.footnote)
+                            .font(.body)
                     }
-                    Text ("Daily deficit")
-                        .font(.footnote)
                 }
                 
                 Spacer ()
@@ -67,10 +69,10 @@ struct CurrentStats: View
                     
                     HStack
                     {
-                        Text ("BMR")
-                        Text ("\(bmr)kcal")
+                        Text ("Active")
+                        Text ("\(v.today.active)kcal")
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: bmr)
+                            .animation(.snappy, value: v.today.consumed)
                     }
                     
                     HStack
@@ -83,10 +85,10 @@ struct CurrentStats: View
                     
                     HStack
                     {
-                        Text ("Active")
-                        Text ("\(v.today.active)kcal")
+                        Text ("BMR")
+                        Text ("\(bmr)kcal")
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.consumed)
+                            .animation(.snappy, value: bmr)
                     }
                 }
                 .font(.caption2)

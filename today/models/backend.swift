@@ -151,6 +151,8 @@ actor Backend
     public func GetMealsInv () -> [ListItemContent]
     {
         let res = vDb.GetMealsInv ();
+//        let m = vDb.GetMealsInvCpp ();
+        
         var meals: [ListItemContent] = [];
         
         for meal in res

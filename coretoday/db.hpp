@@ -15,34 +15,38 @@
 class DB {
     
 public:
-                                    DB                  ();
-                                    ~DB                 ();
-    
-    bool                            Open                (const std::string& pPath);
-    void                            Close               ();
+                                        DB                  ();
+                                        ~DB                 ();
+        
+        bool                            Open                (const std::string& pPath);
+        void                            Close               ();
 
-    std::vector<tListItemContent>   GetMealsInv         ();
-    bool                            LogMeal             (const std::string& pMealId);
-    bool                            UnLogMeal           (const int pRecordId);
-    bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals, const int& pProtein, const std::string& pIcon);
-    bool                            DelMealInv          (const std::string& pId);
+        std::vector<tListItemContent>   GetMealsInv         ();
+        bool                            LogMeal             (const std::string& pMealId);
+        bool                            UnLogMeal           (const int pRecordId);
+        bool                            AddMealInv          (const std::string& pId, const std::string& pTitle, const int& pCals, const int& pProtein, const std::string& pIcon);
+        bool                            DelMealInv          (const std::string& pId);
+        
+        std::vector<tListItemContent>   GetExInv            ();
+        bool                            LogEx               (const std::string& pActId);
+        bool                            UnLogEx             (const int pRecordId);
+        bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals, const std::string& pIcon);
+        bool                            DelExInv            (const std::string& pId);
+        
+        tProfile                        GetProf             ();
+        
+        tToday                          GetToday            ();
+        std::vector<tListItemContent>   GetTodayMeals       ();
+        std::vector<tListItemContent>   GetTodayEx          ();
+        bool                            DelTodayMeal        (const int pId);
+        bool                            DelTodayEx          (const int pId);
+        
+        int                             GetTotalDeficit     (const int& pDays);
+        std::vector<int>                GetDeficits         (const int& pDays);
     
-    std::vector<tListItemContent>   GetExInv            ();
-    bool                            LogEx               (const std::string& pActId);
-    bool                            UnLogEx             (const int pRecordId);
-    bool                            AddExInv            (const std::string& pId, const std::string& pTitle, const int& pCals, const std::string& pIcon);
-    bool                            DelExInv            (const std::string& pId);
+const   std::vector<tListItemContent> & GetMealsInvCpp      ()  const [[clang::lifetimebound]];
     
-    tProfile                        GetProf             ();
-    
-    tToday                          GetToday            ();
-    std::vector<tListItemContent>   GetTodayMeals       ();
-    std::vector<tListItemContent>   GetTodayEx          ();
-    bool                            DelTodayMeal        (const int pId);
-    bool                            DelTodayEx          (const int pId);
-    
-    int                             GetTotalDeficit     (const int& pDays);
-    std::vector<int>                GetDeficits         (const int& pDays);
+        std::vector<tListItemContent>   uMeals;
     
 private:
     

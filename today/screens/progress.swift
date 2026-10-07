@@ -14,25 +14,26 @@ struct ProgressScreen: View
     
     var body: some View
     {
-        ScrollView
+        NavigationStack
         {
-            VStack (alignment: .leading)
+            ScrollView
             {
-                Text ("Progress").font(.largeTitle).bold();
-             
-                FatLoss ()
-                
-                Picker("Select duration", selection: $v.pDuration) {
-                    ForEach(eProgressDuration.allCases) { type in
-                        Text("\(type.rawValue)").tag(type)
+                VStack (alignment: .leading)
+                {
+                    FatLoss ()
+                    
+                    Picker("Select duration", selection: $v.pDuration) {
+                        ForEach(eProgressDuration.allCases) { type in
+                            Text("\(type.rawValue)").tag(type)
+                        }
                     }
+                    .pickerStyle(.segmented)
+                    
+                    DeficitHistory ();
                 }
-                .pickerStyle(.segmented)
-                
-                DeficitHistory ();
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.all)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .padding(.all)
-        }
+        }.navigationTitle("Progress")
     }
 }
