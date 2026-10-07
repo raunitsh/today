@@ -17,7 +17,7 @@ struct ContentView: View
         TabView (selection: $v.activeTab)
         {
             NavigationStack
-            { SummaryScreen () }.tabItem
+            { SummaryScreen (currTab: $v.activeTab) }.tabItem
             { Label ("Today", systemImage: "flame") }
                 .tag(eTab.TODAY)
             

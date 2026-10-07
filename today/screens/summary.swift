@@ -15,6 +15,9 @@ struct SummaryScreen: View
         formatDisplayDate (from: TodayViewModel.shared.today.date)!
     }
     
+    @Binding
+    var currTab: eTab;
+    
     var body: some View
     {
         NavigationStack
@@ -30,7 +33,16 @@ struct SummaryScreen: View
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.all)
             }
-        }.navigationTitle(date);
+            .onChange(of: currTab)
+            {_, newtab in
+                
+                if newtab == currTab
+                {
+                    Task { TodayViewModel.shared.Sync () }
+                }
+            }
+        }
+        .navigationTitle(date);
     }
     
     func formatDisplayDate (from dateString: String) -> String?
