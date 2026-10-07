@@ -14,9 +14,20 @@ class ProgressViewModel
     
     public func Sync () -> Void
     {
+        withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+        {
+            progress.totalDeficit = 0;
+            progress.deficitHistory = [];
+            progress.proteinIntake = [];
+        }
         Task
         {
-            progress.totalDeficit = await Backend.shared.GetTotalDeficit (7);
+            let total = await Backend.shared.GetTotalDeficit (7);
+            
+            withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+            {
+                progress.totalDeficit = total;
+            }
             
             let defs = await Backend.shared.GetDeficits (7);
             let pros = await Backend.shared.GetProtein (7);
@@ -34,15 +45,18 @@ class ProgressViewModel
                 
                 if let date = calendar.date (byAdding: .day, value: dayOffset, to: today)
                 {
-                    progress.deficitHistory.append (DayMetric (
-                        day: formatter.string(from: date),
-                        metric: defs [i]
-                    ));
-                    
-                    progress.proteinIntake.append (DayMetric (
-                        day: formatter.string(from: date),
-                        metric: pros [i]
-                    ));
+                    withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+                    {
+                        progress.deficitHistory.append (DayMetric (
+                            day: formatter.string(from: date),
+                            metric: defs [i]
+                        ));
+                        
+                        progress.proteinIntake.append (DayMetric (
+                            day: formatter.string(from: date),
+                            metric: pros [i]
+                        ));
+                    }
                 }
             }
         }

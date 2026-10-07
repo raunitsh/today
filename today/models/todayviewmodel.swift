@@ -14,6 +14,13 @@ class TodayViewModel
     
     func Sync () -> Void
     {
+        withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+        {
+            today = Today(date: "", deficit: 0, consumed: 0, protein: 0, active: 0, updated: 0);
+            eatenToday = [];
+            actToday = [];
+        }
+        
         Task
         {
             let t = await Backend.shared.GetToday ();
