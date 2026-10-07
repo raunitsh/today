@@ -29,6 +29,19 @@ actor Backend
         return defs;
     }
     
+    public func GetProtein (_ pDays: Int32) -> [Int32]
+    {
+        let res = vDb.GetProtein (pDays);
+        var ps: [Int32] = [];
+        
+        for p in res
+        {
+            ps.append(p);
+        }
+        
+        return ps;
+    }
+    
     public func GetTodayMeals () -> [ListItemContent]
     {
         let res = vDb.GetTodayMeals ();

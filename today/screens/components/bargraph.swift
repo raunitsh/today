@@ -12,7 +12,9 @@ struct BarGraph: View
 {
     var pData: [DayMetric];
     let pTitle: String;
+    let pUnit: String;
     let pYAxis: String;
+    let pColor: AnyGradient;
     
     let history: [DayMetric] = ProgressViewModel.shared.progress.deficitHistory
     
@@ -23,8 +25,15 @@ struct BarGraph: View
     {
         VStack (alignment: .leading, spacing: 12)
         {
-            Text(pTitle)
-                .font(.headline)
+            HStack (alignment: .firstTextBaseline)
+            {
+                Text(pTitle)
+                    .font(.headline)
+                
+                Text(pUnit)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             
             Chart(pData)
             { item in
@@ -32,7 +41,7 @@ struct BarGraph: View
                     x: .value("Day", item.day),
                     y: .value(pYAxis, item.metric)
                 )
-                .foregroundStyle(Color.blue.gradient)
+                .foregroundStyle(pColor)
                 .cornerRadius(6)
                 .opacity(selectedDay == nil || selectedDay == item.day ? 1.0 : 0.4)
                 .annotation(position: .top, spacing: 4)

@@ -24,11 +24,13 @@ struct Progress: Sendable
 {
     var totalDeficit: Int32;
     var deficitHistory: [DayMetric];
+    var proteinIntake: [DayMetric];
     
     nonisolated init(totalDeficit: Int32)
     {
         self.totalDeficit = totalDeficit
         self.deficitHistory = [];
+        self.proteinIntake = [];
     }
 }
 

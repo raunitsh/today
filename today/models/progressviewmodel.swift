@@ -19,6 +19,7 @@ class ProgressViewModel
             progress.totalDeficit = await Backend.shared.GetTotalDeficit (7);
             
             let defs = await Backend.shared.GetDeficits (7);
+            let pros = await Backend.shared.GetProtein (7);
             let count = defs.count;
             let calendar = Calendar.current;
             let today = Date ();
@@ -36,7 +37,12 @@ class ProgressViewModel
                     progress.deficitHistory.append (DayMetric (
                         day: formatter.string(from: date),
                         metric: defs [i]
-                    ))
+                    ));
+                    
+                    progress.proteinIntake.append (DayMetric (
+                        day: formatter.string(from: date),
+                        metric: pros [i]
+                    ));
                 }
             }
         }

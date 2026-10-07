@@ -43,6 +43,7 @@ public:
         
         int                             GetTotalDeficit     (const int& pDays);
         std::vector<int>                GetDeficits         (const int& pDays);
+        std::vector<int>                GetProtein          (const int& pDays);
     
 const   std::vector<tListItemContent> & GetMealsInvCpp      ()  const [[clang::lifetimebound]];
     

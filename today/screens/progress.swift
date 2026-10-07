@@ -32,7 +32,9 @@ struct ProgressScreen: View
                     }
                     .pickerStyle(.segmented)
                     
-                    BarGraph (pData: v.progress.deficitHistory, pTitle: "Weekly Deficits", pYAxis: "Deficits");
+                    BarGraph (pData: v.progress.deficitHistory, pTitle: "Weekly Deficits", pUnit: "kcal", pYAxis: "Deficits", pColor: Color.blue.gradient);
+                    BarGraph (pData: v.progress.proteinIntake, pTitle: "Protein Intake", pUnit: "gm", pYAxis: "Intake", pColor: Color.green.gradient);
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.all)
