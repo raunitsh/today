@@ -25,12 +25,12 @@ struct ProgressScreen: View
                 {
                     FatLoss ()
                     
-                    Picker("Select duration", selection: $v.pDuration) {
-                        ForEach(eProgressDuration.allCases) { type in
-                            Text("\(type.rawValue)").tag(type)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+//                    Picker("Select duration", selection: $v.uDuration) {
+//                        ForEach(eProgressDuration.allCases) { type in
+//                            Text("\(type.rawValue)").tag(type)
+//                        }
+//                    }
+//                    .pickerStyle(.segmented)
                     
                     BarGraph (pData: v.progress.deficitHistory, pTitle: "Weekly Deficits", pUnit: "kcal", pYAxis: "Deficits", pColor: Color.blue.gradient);
                     BarGraph (pData: v.progress.proteinIntake, pTitle: "Protein Intake", pUnit: "gm", pYAxis: "Intake", pColor: Color.green.gradient);
@@ -42,7 +42,7 @@ struct ProgressScreen: View
             .onChange(of: currTab)
             {_, newtab in
                 
-                if newtab == currTab
+                if newtab == .PROGRESS
                 {
                     Task { ProgressViewModel.shared.Sync () }
                 }

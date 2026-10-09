@@ -23,6 +23,7 @@ class TodayViewModel
         
         Task
         {
+            let _  = await Backend.shared.GetLogHistory ();
             let t = await Backend.shared.GetToday ();
             let m = await Backend.shared.GetTodayMeals ();
             let a = await Backend.shared.GetTodayActivities ();

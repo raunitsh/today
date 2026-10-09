@@ -12,11 +12,20 @@ struct DayMetric: Sendable, Identifiable
     let id = UUID ();
     let day: String;
     let metric: Int32;
+    let lineXAxis: Int;
+    
+    nonisolated init(day: String, metric: Int32, lineXAxis: Int)
+    {
+        self.day = day
+        self.metric = metric
+        self.lineXAxis = lineXAxis;
+    }
     
     nonisolated init(day: String, metric: Int32)
     {
         self.day = day
         self.metric = metric
+        self.lineXAxis = 0;
     }
 }
 

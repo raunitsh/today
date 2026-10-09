@@ -13,7 +13,7 @@ struct FatLoss: View
     
     private var days: Int
     {
-        vm.pDuration == .WEEK ? 7 : 30
+        vm.uDuration == .WEEK ? 7 : 30
     }
     
     private var kgLost: Double

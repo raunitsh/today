@@ -14,7 +14,7 @@ DB::GetTotalDeficit (const int &pDays)
         int             offset  = -(pDays - 1);
         int             total   = 0;
         const char *    q       = R"(
-            SELECT COALESCE(SUM(deficit), 0)
+            SELECT COALESCE(SUM(deficit), 0), date
             FROM today 
             WHERE date >= date('now', 'localtime', ? || ' days')
             AND date <= date('now', 'localtime');

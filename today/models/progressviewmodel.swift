@@ -22,15 +22,15 @@ class ProgressViewModel
         }
         Task
         {
-            let total = await Backend.shared.GetTotalDeficit (7);
+            let total = await Backend.shared.GetTotalDeficit (vDurationDays);
             
             withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
             {
                 progress.totalDeficit = total;
             }
             
-            let defs = await Backend.shared.GetDeficits (7);
-            let pros = await Backend.shared.GetProtein (7);
+            let defs = await Backend.shared.GetDeficits (vDurationDays);
+            let pros = await Backend.shared.GetProtein (vDurationDays);
             let count = defs.count;
             let calendar = Calendar.current;
             let today = Date ();
@@ -38,6 +38,19 @@ class ProgressViewModel
             
             formatter.dateFormat = "EEE" // "Mon", "Tue", "Wed", etc.
             progress.deficitHistory.removeAll();
+            
+            print (defs);
+            print ("defs: \(defs.count)")
+            
+            print (pros);
+            print ("protein: \(pros.count)")
+            
+            if defs.count != pros.count
+            {
+                progress.deficitHistory = [];
+                progress.proteinIntake = [];
+                return;
+            }
             
             for i in 0..<count
             {
@@ -49,12 +62,14 @@ class ProgressViewModel
                     {
                         progress.deficitHistory.append (DayMetric (
                             day: formatter.string(from: date),
-                            metric: defs [i]
+                            metric: defs [i],
+                            lineXAxis: i
                         ));
                         
                         progress.proteinIntake.append (DayMetric (
                             day: formatter.string(from: date),
-                            metric: pros [i]
+                            metric: pros [i],
+                            lineXAxis: i
                         ));
                     }
                 }
@@ -62,6 +77,7 @@ class ProgressViewModel
         }
     }
     
-    var progress: Progress = Progress (totalDeficit: 7069);
-    var pDuration: eProgressDuration = .WEEK;
+    var         progress:       Progress            = Progress (totalDeficit: 7069);
+    private var vDurationDays:  Int32               = 7;
+    var         uDuration:      eProgressDuration   = .WEEK;
 }

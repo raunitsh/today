@@ -38,7 +38,7 @@ struct BarGraph: View
             Chart(pData)
             { item in
                 BarMark(
-                    x: .value("Day", item.day),
+                    x: .value("Day",  item.day),
                     y: .value(pYAxis, item.metric)
                 )
                 .foregroundStyle(pColor)

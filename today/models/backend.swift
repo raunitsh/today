@@ -11,6 +11,18 @@ actor Backend
 {
     static let shared = Backend ();
     
+    public func GetLogHistory () -> [String]
+    {
+        let res = vDb.GetLogHistory ();
+        
+        for i in res
+        {
+            print (i);
+        }
+        
+        return [];
+    }
+    
     public func GetTotalDeficit (_ pDays: Int32) -> Int32
     {
         return -vDb.GetTotalDeficit (pDays);

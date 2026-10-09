@@ -36,13 +36,13 @@ struct SummaryScreen: View
             .onChange(of: currTab)
             {_, newtab in
                 
-                if newtab == currTab
+                if newtab == .TODAY
                 {
                     Task { TodayViewModel.shared.Sync () }
                 }
             }
         }
-        .navigationTitle(date);
+        .navigationTitle(date)
     }
     
     func formatDisplayDate (from dateString: String) -> String?

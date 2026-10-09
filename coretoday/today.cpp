@@ -150,3 +150,31 @@ DB::DelTodayEx (const int pId)
 {
     return true;
 }
+
+std::vector<std::string>
+DB::GetLogHistory ()
+{
+        std::vector<std::string> res;
+        const char * q = "SELECT date FROM today ORDER BY date DESC";
+        sqlite3_stmt * st;
+        const unsigned char * d;
+    
+    if (!vDb)
+    {
+        return res;
+    }
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &st, nullptr) != SQLITE_OK)
+    {
+        return res;
+    }
+    
+    while (sqlite3_step(st) == SQLITE_ROW)
+    {
+        d = sqlite3_column_text(st, 0);
+        
+        res.push_back (d ? (const char *)d : "");
+    }
+    
+    return res;
+}

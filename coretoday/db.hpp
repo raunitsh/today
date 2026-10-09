@@ -40,6 +40,8 @@ public:
         std::vector<tListItemContent>   GetTodayEx          ();
         bool                            DelTodayMeal        (const int pId);
         bool                            DelTodayEx          (const int pId);
+    
+        std::vector<std::string>        GetLogHistory       ();
         
         int                             GetTotalDeficit     (const int& pDays);
         std::vector<int>                GetDeficits         (const int& pDays);
