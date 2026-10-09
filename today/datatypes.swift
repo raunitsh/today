@@ -51,21 +51,24 @@ struct ListItemContent: Identifiable, Sendable
     let protein: Int32
     var recordId: Int32 = 0;
     let icon: String;
+    var createdAt: Date = Date();
+    var type: eLogType;
     
     var compositeId: String {
-        "\(recordId)-\(id)"
+        "\(type)-\(recordId)-\(id)"
     }
 
-    nonisolated init(id: UUID = UUID(), title: String, cals: Int32, protein: Int32, icon: String)
+    nonisolated init(id: UUID = UUID(), title: String, cals: Int32, protein: Int32, icon: String, type: eLogType)
     {
         self.id = id
         self.title = title
         self.cals = cals
         self.icon = icon
         self.protein = protein
+        self.type = type;
     }
     
-    nonisolated init(recordId: Int32, title: String, cals: Int32, protein: Int32, icon: String)
+    nonisolated init(recordId: Int32, title: String, cals: Int32, protein: Int32, icon: String, type: eLogType)
     {
         self.recordId = recordId
         self.title = title
@@ -73,7 +76,26 @@ struct ListItemContent: Identifiable, Sendable
         self.id = UUID ()
         self.icon = icon;
         self.protein = protein
+        self.type = type
     }
+    
+    nonisolated init(recordId: Int32, title: String, cals: Int32, protein: Int32, icon: String, type: eLogType, createdAt: Date)
+    {
+        self.recordId = recordId
+        self.title = title
+        self.cals = cals
+        self.id = UUID ()
+        self.icon = icon;
+        self.protein = protein
+        self.type = type;
+        self.createdAt = createdAt;
+    }
+}
+
+enum eLogType: Sendable
+{
+    case meal
+    case workout
 }
 
 enum ViewType: String, CaseIterable, Identifiable

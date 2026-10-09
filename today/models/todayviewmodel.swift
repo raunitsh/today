@@ -17,22 +17,39 @@ class TodayViewModel
         withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
         {
             today = Today(date: "", deficit: 0, consumed: 0, protein: 0, active: 0, updated: 0);
-            eatenToday = [];
-            actToday = [];
+            timeline = [];
         }
         
         Task
         {
-            let _  = await Backend.shared.GetLogHistory ();
             let t = await Backend.shared.GetToday ();
-            let m = await Backend.shared.GetTodayMeals ();
-            let a = await Backend.shared.GetTodayActivities ();
+            let tm = await Backend.shared.GetTodayTimeline ();
             
             withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
             {
                 self.today = t;
-                self.eatenToday = m;
-                self.actToday = a;
+                self.timeline = tm;
+            }
+        }
+    }
+
+    func deleteTimelineItem (_ item: ListItemContent)
+    {
+        Task
+        {
+            let success: Bool
+            
+            if item.type == .meal
+            {
+                success = await Backend.shared.UnLogMeal (item.recordId)
+            } else
+            {
+                success = await Backend.shared.UnLogAct (item.recordId)
+            }
+            
+            if success
+            {
+                Sync()
             }
         }
     }
@@ -89,5 +106,6 @@ class TodayViewModel
     var today:      Today             = Today (date: "", deficit: 0, consumed: 0, protein: 0, active: 0, updated: 0);
     var eatenToday: [ListItemContent] = [];
     var actToday:   [ListItemContent] = [];
+    var timeline:   [ListItemContent] = [];
     var activeTab:  eTab              = .TODAY;
 }

@@ -11,6 +11,27 @@ actor Backend
 {
     static let shared = Backend ();
     
+    public func GetTodayTimeline () -> [ListItemContent]
+    {
+        let res = vDb.GetTodayTimeline ();
+        var timeline: [ListItemContent] = [];
+        
+        for item in res
+        {
+            timeline.append (ListItemContent (
+                recordId: item.uRecordId,
+                title: String (item.uTitle),
+                cals: item.uCals,
+                protein: item.uProtein,
+                icon: String (item.uIcon),
+                type: String (item.uType).first == "m" ? .meal : .workout,
+                createdAt: Date (timeIntervalSince1970: TimeInterval (item.uCreatedAt))
+            ));
+        }
+        
+        return timeline;
+    }
+    
     public func GetLogHistory () -> [String]
     {
         let res = vDb.GetLogHistory ();
@@ -66,7 +87,9 @@ actor Backend
                 title: String (item.uTitle),
                 cals: item.uCals,
                 protein: item.uProtein,
-                icon: String (item.uIcon)
+                icon: String (item.uIcon),
+                type: .meal,
+                createdAt: Date (timeIntervalSince1970: TimeInterval (item.uCreatedAt))
             ));
         }
         
@@ -85,7 +108,9 @@ actor Backend
                 title: String (item.uTitle),
                 cals: item.uCals,
                 protein: 0,
-                icon: String (item.uIcon)
+                icon: String (item.uIcon),
+                type: .workout,
+                createdAt: Date (timeIntervalSince1970: TimeInterval (item.uCreatedAt))
             ));
         }
         
@@ -192,8 +217,9 @@ actor Backend
                 title: title,
                 cals: cals,
                 protein: meal.uProtein,
-                icon: icon)
-            )
+                icon: icon,
+                type: .meal
+            ))
         }
         
         return meals;
@@ -208,7 +234,8 @@ actor Backend
                 title: String(act.uTitle),
                 cals: act.uCals,
                 protein: 0,
-                icon: String (act.uIcon)
+                icon: String (act.uIcon),
+                type: .workout
             )
         }
     }

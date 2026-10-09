@@ -27,8 +27,9 @@ struct SummaryScreen: View
                 VStack (alignment: .leading)
                 {
                     CurrentStats ();
-                    EatenToday ();
-                    ActivityToday ();
+                    TodayTimeline ();
+//                    EatenToday ();
+//                    ActivityToday ();
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.all)

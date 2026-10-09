@@ -12,9 +12,11 @@ struct tListItemContent
     int         uCals;
     int         uProtein;
     int         uRecordId = 0;
+    int64_t     uCreatedAt;
     std::string uId;
     std::string uTitle;
     std::string uIcon;
+    std::string uType;
 };
 
 struct tProfile

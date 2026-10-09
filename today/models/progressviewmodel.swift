@@ -39,12 +39,6 @@ class ProgressViewModel
             formatter.dateFormat = "EEE" // "Mon", "Tue", "Wed", etc.
             progress.deficitHistory.removeAll();
             
-            print (defs);
-            print ("defs: \(defs.count)")
-            
-            print (pros);
-            print ("protein: \(pros.count)")
-            
             if defs.count != pros.count
             {
                 progress.deficitHistory = [];
