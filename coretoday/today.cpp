@@ -246,3 +246,80 @@ DB::GetTodayTimeline ()
     sqlite3_finalize(st);
     return res;
 }
+
+bool
+DB::DeleteToday ()
+{
+        char * date;
+        sqlite3_stmt * today_st;
+        sqlite3_stmt * mst;
+        sqlite3_stmt * ast;
+        const char * q = R"(
+            DELETE FROM today WHERE date = ?;
+        )";
+        
+    if (!vDb)
+    {
+        return false;
+    }
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &today_st, nullptr) != SQLITE_OK)
+    {
+        return false;
+    }
+    
+    date = new char [11];
+    GetTodayDate (date);
+    
+    sqlite3_bind_text(today_st, 1, date, -1, SQLITE_TRANSIENT);
+    
+    if (sqlite3_step(today_st) != SQLITE_DONE)
+    {
+        sqlite3_finalize(today_st);
+        delete[] date;
+        return false;
+    }
+    
+    sqlite3_finalize (today_st);
+    
+    q = "DELETE FROM today_meals WHERE entry_date = ?;";
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &mst, nullptr) != SQLITE_OK)
+    {
+        delete[] date;
+        return false;
+    }
+    
+    sqlite3_bind_text(mst, 1, date, -1, SQLITE_TRANSIENT);
+    
+    if (sqlite3_step(mst) != SQLITE_DONE)
+    {
+        delete[] date;
+        sqlite3_finalize (mst);
+        return false;
+    }
+    
+    sqlite3_finalize(mst);
+    
+    q = "DELETE FROM today_act WHERE entry_date = ?;";
+    
+    if (sqlite3_prepare_v2(vDb, q, -1, &ast, nullptr) != SQLITE_OK)
+    {
+        delete[] date;
+        return false;
+    }
+    
+    sqlite3_bind_text(ast, 1, date, -1, SQLITE_TRANSIENT);
+    
+    if (sqlite3_step(ast) != SQLITE_DONE)
+    {
+        delete[] date;
+        sqlite3_finalize(ast);
+        return false;
+    }
+    
+    sqlite3_finalize(ast);
+    delete[] date;
+    
+    return true;
+}

@@ -36,6 +36,7 @@ public:
         tProfile                        GetProf             ();
         
         tToday                          GetToday            ();
+        bool                            DeleteToday         ();
         std::vector<tListItemContent>   GetTodayTimeline    ();
         std::vector<tListItemContent>   GetTodayMeals       ();
         std::vector<tListItemContent>   GetTodayEx          ();

@@ -11,6 +11,11 @@ actor Backend
 {
     static let shared = Backend ();
     
+    public func ResetToday () -> Void
+    {
+        vDb.DeleteToday ();
+    }
+    
     public func GetTodayTimeline () -> [ListItemContent]
     {
         let res = vDb.GetTodayTimeline ();

@@ -241,7 +241,7 @@ DB::LogEx(const std::string &pActId)
             return false;
         }
         
-        deficit = act_cals;
+        deficit = -bmr - act_cals;
         active += act_cals;
         created = GetNow();
         updated = GetNow();

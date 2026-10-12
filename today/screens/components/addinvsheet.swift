@@ -112,6 +112,11 @@ struct AddInvSheet: View
                 ToolbarItem (placement: .confirmationAction) {
                     Button ("Done")
                     {
+                        if (pViewType == .exercises)
+                        {
+                            protein = 0;
+                        }
+                        
                         pSubmit (title, cals, protein, selectedIcon);
                         dismiss ()
                     }

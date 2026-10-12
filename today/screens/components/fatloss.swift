@@ -11,10 +11,8 @@ struct FatLoss: View
 {
     var vm = ProgressViewModel.shared
     
-    private var days: Int
-    {
-        vm.uDuration == .WEEK ? 7 : 30
-    }
+    @State
+    private var days: Int32 = 7;
     
     private var kgLost: Double
     {
@@ -26,7 +24,7 @@ struct FatLoss: View
         VStack (alignment: .leading)
         {
             Text("Estimated weight loss")
-             
+            
             HStack (alignment: .firstTextBaseline, spacing: 4)
             {
                 Text (kgLost, format: .number.precision(.fractionLength(2)))
@@ -44,7 +42,13 @@ struct FatLoss: View
             {
                 Text ("\(vm.progress.totalDeficit) kcal total deficit")
                 Dot()
-                Text("last \(days) days")
+                Menu {
+                    Button("Last 7 Days  ") { days = 7 }
+                    Button("Last 30 Days") { days = 30 }
+                } label: {
+                    Text("last \(days) days")
+                        .foregroundColor(.blue)
+                }
             }
             
             Divider ()
@@ -54,5 +58,9 @@ struct FatLoss: View
         .font(.caption)
         .foregroundStyle(.secondary)
         .padding(.top)
+        .onChange(of: days)
+        {
+            vm.UpdateTotalDeficit (days);
+        }
     }
 }

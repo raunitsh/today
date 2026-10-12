@@ -12,6 +12,21 @@ class ProgressViewModel
 {
     static let shared =  ProgressViewModel ();
     
+    public func UpdateTotalDeficit (_ pDays: Int32)
+    {
+        progress.totalDeficit = 0;
+        
+        Task
+        {
+            let n = await Backend.shared.GetTotalDeficit (pDays);
+            
+            withAnimation (.spring (response: 0.35, dampingFraction: 0.8))
+            {
+                progress.totalDeficit = n;
+            }
+        }
+    }
+    
     public func Sync () -> Void
     {
         withAnimation (.spring (response: 0.35, dampingFraction: 0.8))

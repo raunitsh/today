@@ -32,6 +32,15 @@ class TodayViewModel
             }
         }
     }
+    
+    func resetToday ()
+    {
+        Task
+        {
+            await Backend.shared.ResetToday ();
+            Sync ();
+        }
+    }
 
     func deleteTimelineItem (_ item: ListItemContent)
     {
