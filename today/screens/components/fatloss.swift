@@ -39,7 +39,7 @@ struct FatLoss: View
             {
                 Text ("\(vm.progress.totalDeficit) kcal total deficit")
                 Dot()
-                Text ("Last \(vm.uDuration == .WEEK ? 7 : 30) days")
+                Text ("Last \(vm.uDuration == .WEEK ? "7 days" : "4 weeks")")
             }
             
             Divider ()
