@@ -20,6 +20,7 @@ class ProgressViewModel
             progress.deficitHistory = [];
             progress.proteinIntake = [];
             progress.calIntake = [];
+            progress.activeCals = [];
         }
         Task
         {
@@ -38,10 +39,14 @@ class ProgressViewModel
             let today = Date ();
             let formatter = DateFormatter()
             
+            progress.deficitHistory.removeAll();
+            progress.proteinIntake.removeAll();
+            progress.calIntake.removeAll();
+            progress.activeCals.removeAll();
+            
             if uDuration == .WEEK
             {
                 formatter.dateFormat = "EEE" // "Mon", "Tue", "Wed", etc.
-                progress.deficitHistory.removeAll();
                 
                 for i in 0..<count
                 {
