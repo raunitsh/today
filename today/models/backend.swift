@@ -37,6 +37,26 @@ actor Backend
         return timeline;
     }
     
+    public func GetTimeline (_ pDate: String) -> [ListItemContent]
+    {
+        let res = vDb.GetTimeline (std.string (pDate));
+        var timeline: [ListItemContent] = [];
+        
+        for item in res
+        {
+            timeline.append (ListItemContent (
+                recordId: item.uRecordId,
+                title: String (item.uTitle),
+                cals: item.uCals,
+                protein: item.uProtein,
+                icon: String (item.uIcon),
+                type: String (item.uType).first == "m" ? .meal : .workout,
+                createdAt: Date (timeIntervalSince1970: TimeInterval (item.uCreatedAt))
+            ));
+        }
+        
+        return timeline;
+    }
     public func GetLogHistory () -> [String]
     {
         let res = vDb.GetLogHistory ();
@@ -54,30 +74,24 @@ actor Backend
         return -vDb.GetTotalDeficit (pDays);
     }
     
-    public func GetDeficits (_ pDays: Int32) -> [Int32]
+    public func GetProgress (_ pDays: Int32) -> [Today]
     {
-        let res = vDb.GetDeficits (pDays);
-        var defs: [Int32] = [];
+        let res =  vDb.GetProgress (pDays);
+        var d: [Today] = [];
         
-        for d in res
+        for t in res
         {
-            defs.append(-d);
+            d.append (Today (
+                date: String (t.uDate),
+                deficit: -t.uDeficit,
+                consumed: t.uConsumed,
+                protein: t.uProtein,
+                active: t.uActive,
+                updated: 0
+            ));
         }
         
-        return defs;
-    }
-    
-    public func GetProtein (_ pDays: Int32) -> [Int32]
-    {
-        let res = vDb.GetProtein (pDays);
-        var ps: [Int32] = [];
-        
-        for p in res
-        {
-            ps.append(p);
-        }
-        
-        return ps;
+        return d;
     }
     
     public func GetTodayMeals () -> [ListItemContent]
@@ -125,6 +139,20 @@ actor Backend
     public func GetToday () -> Today
     {
         let res: tToday =  vDb.GetToday ();
+        
+        return Today (
+            date: String (res.uDate),
+            deficit: res.uDeficit,
+            consumed: res.uConsumed,
+            protein: res.uProtein,
+            active: res.uActive,
+            updated: res.uUpdated
+        );
+    }
+    
+    public func GetOldStats (_ pDate: String) -> Today
+    {
+        let res: tToday =  vDb.GetOldStats (std.string (pDate));
         
         return Today (
             date: String (res.uDate),

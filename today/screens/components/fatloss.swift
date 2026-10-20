@@ -42,13 +42,7 @@ struct FatLoss: View
             {
                 Text ("\(vm.progress.totalDeficit) kcal total deficit")
                 Dot()
-                Menu {
-                    Button("Last 7 Days  ") { days = 7 }
-                    Button("Last 30 Days") { days = 30 }
-                } label: {
-                    Text("last \(days) days")
-                        .foregroundColor(.blue)
-                }
+                Text ("Last \(vm.uDuration == .WEEK ? 7 : 30) days")
             }
             
             Divider ()

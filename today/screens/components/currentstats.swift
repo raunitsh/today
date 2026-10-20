@@ -27,8 +27,8 @@ struct VisualProgress: View
 
 struct CurrentStats: View
 {
-    var v = TodayViewModel.shared;
-    var bmr = UserViewModel.shared.userProfile?.bmr ?? 0;
+    let stats: Today;
+    let bmr: Int32;
     
     var body: some View
     {
@@ -44,11 +44,11 @@ struct CurrentStats: View
                     
                     HStack (alignment: .firstTextBaseline, spacing: 4)
                     {
-                        Text ("\(v.today.deficit)")
+                        Text ("\(stats.deficit)")
                             .font(.system(size: 52, weight: .bold, design: .rounded))
                             .bold()
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.deficit)
+                            .animation(.snappy, value: stats.deficit)
                         
                         Text ("kcal")
                             .font(.body)
@@ -62,25 +62,25 @@ struct CurrentStats: View
                     HStack
                     {
                         Text ("Protein")
-                        Text ("\(v.today.protein)g")
+                        Text ("\(stats.protein)g")
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.protein)
+                            .animation(.snappy, value: stats.protein)
                     }
                     
                     HStack
                     {
                         Text ("Active")
-                        Text ("\(v.today.active)kcal")
+                        Text ("\(stats.active)kcal")
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.consumed)
+                            .animation(.snappy, value: stats.consumed)
                     }
                     
                     HStack
                     {
                         Text ("Eaten")
-                        Text ("\(v.today.consumed)kcal")
+                        Text ("\(stats.consumed)kcal")
                             .contentTransition(.numericText())
-                            .animation(.snappy, value: v.today.consumed)
+                            .animation(.snappy, value: stats.consumed)
                     }
                     
                     HStack

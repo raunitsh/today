@@ -36,8 +36,10 @@ public:
         tProfile                        GetProf             ();
         
         tToday                          GetToday            ();
+        tToday                          GetOldStats         (const std::string& pDate);
         bool                            DeleteToday         ();
         std::vector<tListItemContent>   GetTodayTimeline    ();
+        std::vector<tListItemContent>   GetTimeline         (const std::string& pDate);
         std::vector<tListItemContent>   GetTodayMeals       ();
         std::vector<tListItemContent>   GetTodayEx          ();
         bool                            DelTodayMeal        (const int pId);
@@ -45,8 +47,10 @@ public:
     
         std::vector<std::string>        GetLogHistory       ();
         
-        int                             GetTotalDeficit     (const int& pDays);
-        std::vector<int>                GetDeficits         (const int& pDays);
+        int                                         GetTotalDeficit     (const int& pDays);
+        std::vector<std::pair<std::string, int>>    GetDeficits         (const int& pDays);
+        std::vector<std::pair<std::string, int>>    GetCalIntake        (const int& pDays);
+        std::vector<tToday>                         GetProgress         (const int& pDays);
         std::vector<int>                GetProtein          (const int& pDays);
     
 const   std::vector<tListItemContent> & GetMealsInvCpp      ()  const [[clang::lifetimebound]];
@@ -54,13 +58,16 @@ const   std::vector<tListItemContent> & GetMealsInvCpp      ()  const [[clang::l
         std::vector<tListItemContent>   uMeals;
     
 private:
-    
-    bool                            InternalMapMeal     (const char * pDate, const char * pMealId);
-    bool                            InternalUnmapMeal   (const int pRecordId);
-    bool                            InternalMapEx       (const char * pDate, const char * pMealId);
-    bool                            InternalUnmapEx     (const int pRecordId);
-    bool                            InternalExecute     (const char * pSql);
-    void                            InternalCreateUser  ();
-    
-    struct sqlite3*                 vDb = nullptr;
+
+        std::vector<tListItemContent>   InternalGetTimeline (const char * pDate);
+        tToday                          InternalGetStats    (const char * pDate);
+
+        bool                            InternalMapMeal     (const char * pDate, const char * pMealId);
+        bool                            InternalUnmapMeal   (const int pRecordId);
+        bool                            InternalMapEx       (const char * pDate, const char * pMealId);
+        bool                            InternalUnmapEx     (const int pRecordId);
+        bool                            InternalExecute     (const char * pSql);
+        void                            InternalCreateUser  ();
+        
+        struct sqlite3*                 vDb = nullptr;
 };

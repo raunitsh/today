@@ -25,15 +25,17 @@ struct ProgressScreen: View
                 {
                     FatLoss ()
                     
-//                    Picker("Select duration", selection: $v.uDuration) {
-//                        ForEach(eProgressDuration.allCases) { type in
-//                            Text("\(type.rawValue)").tag(type)
-//                        }
-//                    }
-//                    .pickerStyle(.segmented)
+                    Picker("Select duration", selection: $v.uDuration) {
+                        ForEach(eProgressDuration.allCases) { type in
+                            Text("\(type.rawValue)").tag(type)
+                        }
+                    }
+                    .pickerStyle(.segmented)
                     
                     BarGraph (pData: v.progress.deficitHistory, pTitle: "Weekly Deficits", pUnit: "kcal", pYAxis: "Deficits", pColor: Color.blue.gradient);
                     BarGraph (pData: v.progress.proteinIntake, pTitle: "Protein Intake", pUnit: "gm", pYAxis: "Intake", pColor: Color.green.gradient);
+                    BarGraph (pData: v.progress.calIntake, pTitle: "Calorie Intake", pUnit: "kcal", pYAxis: "Intake", pColor: Color.red.gradient);
+                    BarGraph (pData: v.progress.activeCals, pTitle: "Active calories", pUnit: "kcal", pYAxis: "Burn", pColor: Color.yellow.gradient);
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

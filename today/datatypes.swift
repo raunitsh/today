@@ -11,21 +11,16 @@ struct DayMetric: Sendable, Identifiable
 {
     let id = UUID ();
     let day: String;
+    let date: String;
     let metric: Int32;
     let lineXAxis: Int;
     
-    nonisolated init(day: String, metric: Int32, lineXAxis: Int)
+    nonisolated init(day: String, metric: Int32, lineXAxis: Int, date: String)
     {
         self.day = day
         self.metric = metric
         self.lineXAxis = lineXAxis;
-    }
-    
-    nonisolated init(day: String, metric: Int32)
-    {
-        self.day = day
-        self.metric = metric
-        self.lineXAxis = 0;
+        self.date = date;
     }
 }
 
@@ -34,12 +29,16 @@ struct Progress: Sendable
     var totalDeficit: Int32;
     var deficitHistory: [DayMetric];
     var proteinIntake: [DayMetric];
+    var calIntake: [DayMetric];
+    var activeCals: [DayMetric];
     
     nonisolated init(totalDeficit: Int32)
     {
         self.totalDeficit = totalDeficit
         self.deficitHistory = [];
         self.proteinIntake = [];
+        self.calIntake = [];
+        self.activeCals = [];
     }
 }
 
@@ -157,4 +156,23 @@ struct Today: Sendable
         self.updated = updated;
         self.protein = protein;
     }
+}
+
+func formatDisplayDate (from dateString: String) -> String?
+{
+    let parseStrategy = Date.ISO8601FormatStyle()
+        .year().month().day()
+        .dateSeparator(.dash)
+    
+    guard let date = try? Date(dateString, strategy: parseStrategy) else {
+        return nil
+    }
+    
+    // Formats into: EEE d MMM (e.g., "Fri 2 Oct")
+    return date.formatted(
+        .dateTime
+            .weekday(.abbreviated)
+            .day()
+            .month(.abbreviated)
+    )
 }

@@ -21,6 +21,8 @@ struct SummaryScreen: View
     @Binding
     var currTab: eTab;
     
+    var v = TodayViewModel.shared;
+    
     var body: some View
     {
         NavigationStack
@@ -29,10 +31,8 @@ struct SummaryScreen: View
             {
                 VStack (alignment: .leading)
                 {
-                    CurrentStats ();
-                    TodayTimeline ();
-//                    EatenToday ();
-//                    ActivityToday ();
+                    CurrentStats (stats: v.today, bmr: UserViewModel.shared.userProfile?.bmr ?? 0);
+                    TodayTimeline (timeline: v.timeline, readonly: false, deleteTimelineItem: v.deleteTimelineItem);
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .padding(.all)
@@ -69,24 +69,5 @@ struct SummaryScreen: View
             
             Button ("Cancel", role: .close) {}
         }
-    }
-    
-    func formatDisplayDate (from dateString: String) -> String?
-    {
-        let parseStrategy = Date.ISO8601FormatStyle()
-            .year().month().day()
-            .dateSeparator(.dash)
-        
-        guard let date = try? Date(dateString, strategy: parseStrategy) else {
-            return nil
-        }
-        
-        // Formats into: EEE d MMM (e.g., "Fri 2 Oct")
-        return date.formatted(
-            .dateTime
-                .weekday(.abbreviated)
-                .day()
-                .month(.abbreviated)
-        )
     }
 }

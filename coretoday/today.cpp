@@ -13,10 +13,28 @@
 tToday
 DB::GetToday ()
 {
+        char * date = new char [11];
+        tToday res;
+    
+    GetTodayDate (date);
+    res = InternalGetStats (date);
+    
+    delete[] date;
+    return res;
+}
+
+tToday
+DB::GetOldStats (const std::string& pDate)
+{
+    return InternalGetStats (pDate.c_str ());
+}
+
+tToday
+DB::InternalGetStats (const char * pDate)
+{
         tToday res;
         const char * q = "SELECT date, deficit, consumed, protein, active, updated_at FROM today WHERE date = ?;";
         sqlite3_stmt * st;
-        char * date;
         
     if (!vDb)
     {
@@ -28,20 +46,16 @@ DB::GetToday ()
         return {};
     }
     
-    date = new char [11];
-    GetTodayDate (date);
-    
-    sqlite3_bind_text(st, 1, date, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(st, 1, pDate, -1, SQLITE_TRANSIENT);
     
     if (sqlite3_step(st) != SQLITE_ROW)
     {
         // No record
-        delete[] date;
         sqlite3_finalize (st);
         return {};
     }
     
-    res.uDate = date;
+    res.uDate = pDate;
     res.uDeficit = sqlite3_column_int(st, 1);
     res.uConsumed = sqlite3_column_int(st, 2);
     res.uProtein =  sqlite3_column_int(st, 3);
@@ -49,7 +63,6 @@ DB::GetToday ()
     res.uUpdated  = sqlite3_column_int64(st, 5);
     
     sqlite3_finalize(st);
-    delete [] date;
     
     return res;
 }
@@ -185,8 +198,26 @@ DB::GetLogHistory ()
 std::vector<tListItemContent>
 DB::GetTodayTimeline ()
 {
+        char * date = new char [11];
         std::vector<tListItemContent> res;
-        char * date;
+    
+    GetTodayDate (date);
+    res = InternalGetTimeline (date);
+    
+    delete[] date;
+    return res;
+}
+
+std::vector<tListItemContent>
+DB::GetTimeline (const std::string& pDate)
+{
+    return InternalGetTimeline (pDate.c_str());
+}
+
+std::vector<tListItemContent>
+DB::InternalGetTimeline (const char * pDate)
+{
+        std::vector<tListItemContent> res;
         sqlite3_stmt * st;
         const unsigned char * title;
         const unsigned char * icon;
@@ -217,11 +248,8 @@ DB::GetTodayTimeline ()
         return res;
     }
     
-    date = new char [11];
-    GetTodayDate (date);
-    
-    sqlite3_bind_text(st, 1, date, -1, SQLITE_TRANSIENT);
-    sqlite3_bind_text(st, 2, date, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(st, 1, pDate, -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(st, 2, pDate, -1, SQLITE_TRANSIENT);
     
     while (sqlite3_step(st) == SQLITE_ROW)
     {
@@ -241,8 +269,7 @@ DB::GetTodayTimeline ()
         
         res.push_back (item);
     }
-    
-    delete[] date;
+
     sqlite3_finalize(st);
     return res;
 }
