@@ -11,9 +11,6 @@ struct FatLoss: View
 {
     var vm = ProgressViewModel.shared
     
-    @State
-    private var days: Int32 = 7;
-    
     private var kgLost: Double
     {
         Double(vm.progress.totalDeficit) / 7700.0
@@ -52,9 +49,5 @@ struct FatLoss: View
         .font(.caption)
         .foregroundStyle(.secondary)
         .padding(.top)
-        .onChange(of: days)
-        {
-            vm.UpdateTotalDeficit (days);
-        }
     }
 }
